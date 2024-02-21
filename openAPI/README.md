@@ -1,0 +1,1 @@
+... openAPI specs for each of the microservices created - read them served by postgREST, save them here to manage them.

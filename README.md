@@ -1,3 +1,34 @@
+The architecture of modern web applications is increasingly moving towards microservices, a pattern that structures an application as a collection of loosely coupled services, which implement business capabilities. The microservice architecture implemented using PostgreSQL, PostgREST, and Nginx, offers a robust and scalable way to build and manage services. Here's an introductory and explanatory text about this architecture, highlighting the mapping of database tables to schemas served as OpenAPI.
+
+---
+
+# Introduction to Microservices Architecture with PostgreSQL, PostgREST, and Nginx
+
+In the realm of web application development, the microservices architecture has emerged as a paradigm that prioritizes flexibility, scalability, and independence. This approach decomposes an application into a set of smaller, interconnected services instead of a single monolithic structure. Each service in a microservices architecture is designed to execute a specific business function and can be developed, deployed, and scaled independently.
+
+## Role of PostgreSQL in Microservices
+
+PostgreSQL, a powerful open-source object-relational database system, serves as the foundation for storing and managing data across microservices. Its advanced features, such as support for complex data types, full-text search, and extensibility, make PostgreSQL an ideal choice for microservices that require robust data persistence and transactional support. In a microservices architecture, each service can have its dedicated PostgreSQL schema, ensuring data isolation and schema independence, which simplifies the management of data persistence in a distributed system.
+
+## PostgREST for API Layer
+
+PostgREST is a standalone web server that turns your PostgreSQL database directly into a RESTful API. The beauty of PostgREST lies in its ability to provide an instant, high-performance API layer without the need for custom backend development. By mapping each PostgreSQL schema to a RESTful endpoint, PostgREST enables microservices to communicate over HTTP with minimal latency, leveraging PostgreSQL's security and scalability. This direct mapping ensures that the data model is accurately and efficiently exposed to other services or front-end clients, adhering to the OpenAPI specifications for clear, interactive API documentation.
+
+## Nginx as the Reverse Proxy
+
+Nginx, known for its high performance, reliability, and scalability, acts as the gatekeeper in this architecture. It serves as a reverse proxy, routing incoming HTTP requests to the appropriate PostgREST instance based on the request URL. Nginx efficiently manages SSL termination, load balancing, and static content delivery, making it an indispensable tool for handling web traffic in a microservices ecosystem. By integrating Nginx, developers can ensure secure, fast, and reliable access to the microservices, while also simplifying the network configuration.
+
+## Mapping Database Tables to Schemas Served as OpenAPI
+
+The essence of this architecture lies in its ability to map individual database tables to dedicated PostgreSQL schemas, each of which is served as an OpenAPI through PostgREST. This approach not only encapsulates the data and operations of each microservice but also promotes a clean, organized structure for API endpoints. OpenAPI specifications offer a standard, language-agnostic interface to RESTful APIs, enabling both humans and computers to discover and understand the capabilities of the service without accessing the source code.
+
+## Conclusion
+
+The combination of PostgreSQL, PostgREST, and Nginx in a microservices architecture provides a compelling solution for building modern, scalable web applications. This setup leverages the strengths of each component to offer a streamlined, efficient pathway from database tables to web-facing APIs, adhering to the principles of independence, scalability, and resilience. As applications grow and evolve, this architecture ensures that each microservice can be modified, scaled, or replaced independently, promoting agility and innovation in web development.
+
+---
+
+This text aims to introduce and explain the integration and functionalities of PostgreSQL, PostgREST, and Nginx in creating a microservices architecture that maps database tables to schemas, further served as OpenAPI, offering a comprehensive, scalable, and efficient approach to modern web application development.
 
 # Shell Script Automation: setup_microservices.sh
 

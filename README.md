@@ -2,7 +2,7 @@
 # Shell Script Automation: setup_microservices.sh
 
 This script automates the setup process for microservices, including creating schemas and tables in PostgreSQL, configuring PostgREST instances, setting up Nginx server blocks, and securing connections with SSL certificates via Certbot.
-
+```
 #!/bin/bash
 echo "Fountain Microservices Setup Automation"
 
@@ -73,3 +73,4 @@ done
 nginx -t && systemctl reload nginx
 
 echo "Fountain backend setup with microservices architecture completed."
+```

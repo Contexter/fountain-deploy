@@ -3,45 +3,50 @@
 
 This script automates the setup process for microservices, including creating schemas and tables in PostgreSQL, configuring PostgREST instances, setting up Nginx server blocks, and securing connections with SSL certificates via Certbot.
 
-```bash
 #!/bin/bash
-echo "Microservices Setup Automation"
+echo "Fountain Microservices Setup Automation"
 
-# Ask for PostgreSQL credentials and database details
+# Gather PostgreSQL credentials and base domain information
 read -p "Enter PostgreSQL database name: " dbname
 read -p "Enter PostgreSQL user: " dbuser
-read -s -p "Enter PostgreSQL password: " dbpass
+echo -n "Enter PostgreSQL password: "
+read -s dbpass
 echo
 read -p "Enter base domain (e.g., benedikt-eickhoff.de): " basedomain
 
-# Define an array of service names to create schemas and configure services
+# Service names representing tables and corresponding schemas
 services=("playwright" "metadata" "script" "act" "scene" "character" "dialogue" "action" "transition" "parenthetical" "note" "centeredtext" "pagebreak" "sectionheading" "titlepage" "casting" "characterrelationship" "musicsound" "props" "revisionhistory" "formattingrules" "crossreferences" "extendednotesresearch" "scenelocation")
 
-# PostgreSQL commands to create schemas and tables
+# Path to the SQL bootstrap file
+sql_path="/path/to/fountain_microservices_bootstrap.sql"
+
+# Loop to set up schemas and tables, and configure PostgREST and Nginx
 for i in "${!services[@]}"; do
-  # Define schema name
   schema="${services[$i]}_schema"
 
-  # Create schema
-  PGPASSWORD=$dbpass psql -h localhost -U $dbuser -d $dbname -c "CREATE SCHEMA IF NOT EXISTS $schema;"
+  # Create schema and import table structure
+  PGPASSWORD=$dbpass psql -h localhost -U $dbuser -d $dbname <<EOF
+CREATE SCHEMA IF NOT EXISTS $schema;
+\set ON_ERROR_STOP on
+\i $sql_path
+EOF
 
-  # Add table creation here based on schema (Placeholder for actual SQL commands)
-  echo "Placeholder: Create table for $schema in database $dbname"
-  
-  # Configure PostgREST and Nginx
-  port=$((3000 + $i + 1))
+  echo "Schema and tables for $schema created in $dbname."
+
+  # PostgREST configuration
+  port=$((3000 + i))
   domain="api-$((i + 1)).$basedomain"
 
-  # Create PostgREST config
-  cat > "/etc/postgrest/${schema}.conf" <<EOF
+  # PostgREST config file creation
+  cat <<EOF > "/etc/postgrest/${schema}.conf"
 db-uri = "postgres://$dbuser:$dbpass@localhost:5432/$dbname"
 db-schema = "$schema"
 db-anon-role = "web_anon"
 server-port = $port
 EOF
 
-  # Configure Nginx
-  cat > "/etc/nginx/sites-available/$domain" <<EOF
+  # Nginx reverse proxy configuration
+  cat <<EOF > "/etc/nginx/sites-available/$domain"
 server {
     listen 80;
     server_name $domain;
@@ -56,34 +61,15 @@ server {
 }
 EOF
   ln -s /etc/nginx/sites-available/$domain /etc/nginx/sites-enabled/
-  
-  # Placeholder for starting PostgREST and reloading Nginx
-  echo "Starting PostgREST for $schema and reloading Nginx..."
-  
-  # Enable HTTPS with Certbot (non-interactive mode)
+
+  # Start PostgREST for the schema
+  postgrest "/etc/postgrest/${schema}.conf" &
+
+  # Enable HTTPS with Certbot
   certbot --nginx -d $domain --non-interactive --agree-tos -m your-email@example.com --redirect
 done
 
-# Reload Nginx to apply configurations
+# Reload Nginx to apply the new configurations
 nginx -t && systemctl reload nginx
 
-echo "Setup completed."
-```
-
-This script serves as a comprehensive guide for system maintainers to automate the configuration and deployment of microservices, ensuring a smooth and efficient setup process.
-
-# Checklist of Variables for System Maintainer
-
-- **PostgreSQL Database Name**: `dbname`
-- **PostgreSQL User**: `dbuser`
-- **PostgreSQL Password**: `dbpass`
-- **Base Domain**: `basedomain`
-- **Service Names**: Listed in the `services` array, each corresponding to a microservice.
-
-# Notes:
-
-- Ensure PostgreSQL, PostgREST, Nginx, and Certbot are installed and properly configured on your Ubuntu 20.04 server before running this script.
-- This script prompts the system maintainer for necessary configuration details, facilitating a personalized and automated setup process.
-- Replace `"Placeholder: Create table for $schema in database $dbname"` in the script with actual SQL commands to create the tables specific to each schema.
-- Modify the Certbot command to include the correct email address for SSL certificate registration.
-- Run this script with sufficient privileges to perform database modifications, configure server settings, and obtain SSL certificates.
+echo "Fountain backend setup with microservices architecture completed."

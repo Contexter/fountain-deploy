@@ -66,7 +66,7 @@ EOF
   postgrest "/etc/postgrest/${schema}.conf" &
 
   # Enable HTTPS with Certbot
-  certbot --nginx -d $domain --non-interactive --agree-tos -m your-email@example.com --redirect
+  certbot --nginx -d $domain --non-interactive --agree-tos -m your-mail@benedikt-eickhoff.de --redirect
 done
 
 # Reload Nginx to apply the new configurations

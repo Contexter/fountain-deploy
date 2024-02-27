@@ -28,10 +28,6 @@ The combination of PostgreSQL, PostgREST, and Nginx in a microservices architect
 
 ---
 
-This text aims to introduce and explain the integration and functionalities of PostgreSQL, PostgREST, and Nginx in creating a microservices architecture that maps database tables to schemas, further served as OpenAPI, offering a comprehensive, scalable, and efficient approach to modern web application development.
----
-
-
 # Automated Setup for Fountain Microservices with GoAccess Monitoring
 
 This script automates the setup of PostgreSQL schemas, PostgREST configurations, Nginx virtual hosts with SSL, and GoAccess log monitoring. It's designed to streamline the deployment process for a microservices architecture, ensuring each component is correctly configured and secured.

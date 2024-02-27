@@ -258,7 +258,6 @@ nginx -t && systemctl reload nginx
 echo "Setup completed. Fountain microservices, GoAccess monitoring, and SSL-secured GoAccess dashboard are configured."
 ```
 
-This script is now fully idempotent, with checks in place to avoid re-creating or re-configuring components that already exist. It includes the creation of PostgREST configurations, Nginx virtual hosts, SSL certificates via Certbot, and GoAccess monitoring setup, ensuring each part only executes if it hasn't been set up previously. 
 
 Note: Make sure the SQL script path (`/path/to/fountain_microservices_bootstrap.sql`) is correctly specified to match the location of your SQL file that contains the table creation commands.
 

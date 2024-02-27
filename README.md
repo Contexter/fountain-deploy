@@ -343,3 +343,224 @@ Before running this script, ensure you:
 - Adjust the script as needed based on any customizations you made to the setup process not covered in the original instructions.
 
 This script provides a clear indication of the operational status of each component involved in the Fountain Microservices and GoAccess monitoring setup. It checks the active status of critical services, validates Nginx configurations, ensures SSL certificates are correctly applied, and confirms the accessibility of the GoAccess dashboard.
+
+## But there are Errors! ...
+
+ which is an expected outcome rsult of the test script. Here is why : 
+ PostgREST does not inherently serve a schema for non-existent database tables. The functionality and response of PostgREST are closely tied to the actual structure of the PostgreSQL database it interfaces with. If a table does not exist in the database, PostgREST cannot provide an API endpoint or schema information for that table. 
+
+PostgREST dynamically generates its API endpoints based on the database schema. When PostgREST starts, it introspects the database to understand its structure, including tables, views, stored procedures, etc. It then exposes this structure as a RESTful API. If a specific table has not been created in the database, PostgREST has no knowledge of it and, therefore, cannot expose any information or schema related to it through its API.
+
+For PostgREST to serve a schema or data from a table, the table must exist in the PostgreSQL database. Once the table is created, PostgREST can automatically expose it as part of its API based on the permissions and roles defined within PostgreSQL and PostgREST's configuration.
+
+##  Scripted creation of the database tables 
+
+Based on the detailed SQL schema for the Fountain Database Bootstrap tailored for a Microservices Architecture you provided, here is the complete shell script that creates all the specified database tables within a PostgreSQL database:
+
+```bash
+#!/bin/bash
+
+# PostgreSQL credentials and database name
+DB_USER="your_db_user"  # Change this to your PostgreSQL user
+DB_PASSWORD="your_db_password"  # Change this to your PostgreSQL password
+DB_NAME="your_db_name"  # Change this to your PostgreSQL database name
+
+# Connect to PostgreSQL and execute the SQL commands to create the tables
+PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -d $DB_NAME <<EOF
+
+-- Playwright Table
+CREATE TABLE IF NOT EXISTS Playwright (
+    Author_ID SERIAL PRIMARY KEY,
+    Name TEXT NOT NULL,
+    Biography TEXT,
+    Contact_Information TEXT
+);
+
+-- Metadata Table
+CREATE TABLE IF NOT EXISTS Metadata (
+    Metadata_ID SERIAL PRIMARY KEY,
+    Creation_Date DATE,
+    Last_Modified_Date DATE,
+    Version_Number INTEGER,
+    Additional_Information TEXT
+);
+
+-- Script Table
+CREATE TABLE IF NOT EXISTS Script (
+    Script_ID SERIAL PRIMARY KEY,
+    Title TEXT NOT NULL,
+    Author_ID INTEGER,
+    URL TEXT,
+    Metadata_ID INTEGER
+);
+
+-- Act Table
+CREATE TABLE IF NOT EXISTS Act (
+    Act_ID SERIAL PRIMARY KEY,
+    Script_ID INTEGER,
+    Act_Number INTEGER NOT NULL,
+    Synopsis TEXT,
+    Notes TEXT
+);
+
+-- Scene Table
+CREATE TABLE IF NOT EXISTS Scene (
+    Scene_ID SERIAL PRIMARY KEY,
+    Act_ID INTEGER,
+    Scene_Number INTEGER NOT NULL,
+    Synopsis TEXT,
+    Notes TEXT
+);
+
+-- Character Table
+CREATE TABLE IF NOT EXISTS Character (
+    Character_ID SERIAL PRIMARY KEY,
+    Script_ID INTEGER,
+    Name TEXT NOT NULL,
+    Description TEXT
+);
+
+-- Dialogue Table
+CREATE TABLE IF NOT EXISTS Dialogue (
+    Dialogue_ID SERIAL PRIMARY KEY,
+    Scene_ID INTEGER,
+    Character_ID INTEGER,
+    Original_Text TEXT,
+    Modernized_Text TEXT
+);
+
+-- Action Table
+CREATE TABLE IF NOT EXISTS Action (
+    Action_ID SERIAL PRIMARY KEY,
+    Scene_ID INTEGER,
+    Character_ID INTEGER,
+    Original_Text TEXT,
+    Modernized_Text TEXT
+);
+
+-- Transition Table
+CREATE TABLE IF NOT EXISTS Transition (
+    Transition_ID SERIAL PRIMARY KEY,
+    Scene_ID INTEGER,
+    Transition_Text TEXT
+);
+
+-- Parenthetical Table
+CREATE TABLE IF NOT EXISTS Parenthetical (
+    Parenthetical_ID SERIAL PRIMARY KEY,
+    Dialogue_ID INTEGER,
+    Original_Text TEXT,
+    Modernized_Text TEXT
+);
+
+-- Note Table
+CREATE TABLE IF NOT EXISTS Note (
+    Note_ID SERIAL PRIMARY KEY,
+    Script_ID INTEGER,
+    Type TEXT,
+    Text TEXT
+);
+
+-- CenteredText Table
+CREATE TABLE IF NOT EXISTS CenteredText (
+    Centered_ID SERIAL PRIMARY KEY,
+    Script_ID INTEGER,
+    Text TEXT
+);
+
+-- PageBreak Table
+CREATE TABLE IF NOT EXISTS PageBreak (
+    Page_Break_ID SERIAL PRIMARY KEY,
+    Script_ID INTEGER,
+    Page_Number INTEGER
+);
+
+-- SectionHeading Table
+CREATE TABLE IF NOT EXISTS SectionHeading (
+    Section_ID SERIAL PRIMARY KEY,
+    Script_ID INTEGER,
+    Text TEXT
+);
+
+-- TitlePage Table
+CREATE TABLE IF NOT EXISTS TitlePage (
+    Title_Page_ID SERIAL PRIMARY KEY,
+    Script_ID INTEGER,
+    Text TEXT
+);
+
+-- Casting Table
+CREATE TABLE IF NOT EXISTS Casting (
+    Casting_ID SERIAL PRIMARY KEY,
+    Character_ID INTEGER,
+    Actor_Characteristics_Choices TEXT
+);
+
+-- CharacterRelationship Table
+CREATE TABLE IF NOT EXISTS CharacterRelationship (
+    Relationship_ID SERIAL PRIMARY KEY,
+    Character1_ID INTEGER,
+    Character2_ID INTEGER,
+    Relationship_Type TEXT
+);
+
+-- MusicSound Table
+CREATE TABLE IF NOT EXISTS MusicSound (
+    Music_Sound_ID SERIAL PRIMARY KEY,
+    Scene_ID INTEGER,
+    Cue TEXT,
+    Description TEXT
+);
+
+-- Props Table
+CREATE TABLE IF NOT EXISTS Props (
+    Prop_ID SERIAL PRIMARY KEY,
+    Scene_ID INTEGER,
+    Description TEXT
+);
+
+-- RevisionHistory Table
+CREATE TABLE IF NOT EXISTS RevisionHistory (
+    Revision_ID SERIAL PRIMARY KEY,
+    Script_ID INTEGER,
+    Date DATE,
+    Change_Description TEXT,
+    Editor TEXT
+);
+
+-- FormattingRules Table
+CREATE TABLE IF NOT EXISTS FormattingRules (
+    Rule_ID SERIAL PRIMARY KEY,
+    Script_ID INTEGER,
+    Rule_Description TEXT
+);
+
+-- CrossReferences Table
+CREATE TABLE IF NOT EXISTS CrossReferences (
+    Cross_Reference_ID SERIAL PRIMARY KEY,
+    Scene_ID INTEGER,
+    Referenced_Scene_ID INTEGER,
+    Description TEXT
+);
+
+-- ExtendedNotesResearch Table
+CREATE TABLE IF NOT EXISTS ExtendedNotesResearch (
+    Research_ID SERIAL PRIMARY KEY,
+    Script_ID INTEGER,
+    Notes TEXT,
+    Research_Details TEXT
+);
+
+-- SceneLocation Table
+CREATE TABLE IF NOT EXISTS SceneLocation (
+    Location_ID SERIAL PRIMARY KEY,
+    Description TEXT NOT NULL,
+    Historical_Cultural_Significance TEXT
+);
+
+EOF
+
+echo "All tables have been created successfully."
+```
+
+Please ensure to replace `your_db_user`, `your_db_password`, and `your_db_name` with your actual PostgreSQL credentials and desired database name. This script assumes you have permission to connect to your PostgreSQL database and execute SQL commands. Before executing the script, ensure PostgreSQL is running and accessible with the provided credentials.

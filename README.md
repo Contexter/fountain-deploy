@@ -353,21 +353,49 @@ For PostgREST to serve a schema or data from a table, the table must exist in th
 
 ##  Scripted creation of the database tables 
 
-Based on the detailed SQL schema for the Fountain Database Bootstrap tailored for a Microservices Architecture you provided, here is the complete shell script that creates all the specified database tables within a PostgreSQL database:
+Based on the detailed SQL schema for the Fountain Database Bootstrap tailored for a Microservices Architecture you provided, here is the complete shell script that creates all the specified database schemata tables within a PostgreSQL database:
 
 ```bash
 #!/bin/bash
 
 # PostgreSQL credentials and database name
-DB_USER="your_db_user"  # Change this to your PostgreSQL user
-DB_PASSWORD="your_db_password"  # Change this to your PostgreSQL password
-DB_NAME="your_db_name"  # Change this to your PostgreSQL database name
+DB_USER="your_db_user"  # Change to your PostgreSQL user
+DB_PASSWORD="your_db_password"  # Change to your PostgreSQL password
+DB_NAME="your_db_name"  # Change to your PostgreSQL database name
 
-# Connect to PostgreSQL and execute the SQL commands to create the tables
+# Connect to PostgreSQL and execute the SQL commands to create schemas and tables
 PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -d $DB_NAME <<EOF
 
+-- Create schemas for microservices
+CREATE SCHEMA IF NOT EXISTS playwright;
+CREATE SCHEMA IF NOT EXISTS metadata;
+CREATE SCHEMA IF NOT EXISTS script;
+CREATE SCHEMA IF NOT EXISTS act;
+CREATE SCHEMA IF NOT EXISTS scene;
+CREATE SCHEMA IF NOT EXISTS character;
+CREATE SCHEMA IF NOT EXISTS dialogue;
+CREATE SCHEMA IF NOT EXISTS action;
+CREATE SCHEMA IF NOT EXISTS transition;
+CREATE SCHEMA IF NOT EXISTS parenthetical;
+CREATE SCHEMA IF NOT EXISTS note;
+CREATE SCHEMA IF NOT EXISTS centeredtext;
+CREATE SCHEMA IF NOT EXISTS pagebreak;
+CREATE SCHEMA IF NOT EXISTS sectionheading;
+CREATE SCHEMA IF NOT EXISTS titlepage;
+CREATE SCHEMA IF NOT EXISTS casting;
+CREATE SCHEMA IF NOT EXISTS characterrelationship;
+CREATE SCHEMA IF NOT EXISTS musicsound;
+CREATE SCHEMA IF NOT EXISTS props;
+CREATE SCHEMA IF NOT EXISTS revisionhistory;
+CREATE SCHEMA IF NOT EXISTS formattingrules;
+CREATE SCHEMA IF NOT EXISTS crossreferences;
+CREATE SCHEMA IF NOT EXISTS extendednotesresearch;
+CREATE SCHEMA IF NOT EXISTS scenelocation;
+
+-- Tables creation within their respective schemas
+
 -- Playwright Table
-CREATE TABLE IF NOT EXISTS Playwright (
+CREATE TABLE playwright.Playwright (
     Author_ID SERIAL PRIMARY KEY,
     Name TEXT NOT NULL,
     Biography TEXT,
@@ -375,7 +403,7 @@ CREATE TABLE IF NOT EXISTS Playwright (
 );
 
 -- Metadata Table
-CREATE TABLE IF NOT EXISTS Metadata (
+CREATE TABLE metadata.Metadata (
     Metadata_ID SERIAL PRIMARY KEY,
     Creation_Date DATE,
     Last_Modified_Date DATE,
@@ -384,173 +412,173 @@ CREATE TABLE IF NOT EXISTS Metadata (
 );
 
 -- Script Table
-CREATE TABLE IF NOT EXISTS Script (
+CREATE TABLE script.Script (
     Script_ID SERIAL PRIMARY KEY,
     Title TEXT NOT NULL,
-    Author_ID INTEGER,
+    Author_ID INTEGER REFERENCES playwright.Playwright(Author_ID),
     URL TEXT,
-    Metadata_ID INTEGER
+    Metadata_ID INTEGER REFERENCES metadata.Metadata(Metadata_ID)
 );
 
 -- Act Table
-CREATE TABLE IF NOT EXISTS Act (
+CREATE TABLE act.Act (
     Act_ID SERIAL PRIMARY KEY,
-    Script_ID INTEGER,
+    Script_ID INTEGER REFERENCES script.Script(Script_ID),
     Act_Number INTEGER NOT NULL,
     Synopsis TEXT,
     Notes TEXT
 );
 
 -- Scene Table
-CREATE TABLE IF NOT EXISTS Scene (
+CREATE TABLE scene.Scene (
     Scene_ID SERIAL PRIMARY KEY,
-    Act_ID INTEGER,
+    Act_ID INTEGER REFERENCES act.Act(Act_ID),
     Scene_Number INTEGER NOT NULL,
     Synopsis TEXT,
     Notes TEXT
 );
 
 -- Character Table
-CREATE TABLE IF NOT EXISTS Character (
+CREATE TABLE character.Character (
     Character_ID SERIAL PRIMARY KEY,
-    Script_ID INTEGER,
+    Script_ID INTEGER REFERENCES script.Script(Script_ID),
     Name TEXT NOT NULL,
     Description TEXT
 );
 
 -- Dialogue Table
-CREATE TABLE IF NOT EXISTS Dialogue (
+CREATE TABLE dialogue.Dialogue (
     Dialogue_ID SERIAL PRIMARY KEY,
-    Scene_ID INTEGER,
-    Character_ID INTEGER,
-    Original_Text TEXT,
+    Scene_ID INTEGER REFERENCES scene.Scene(Scene_ID),
+    Character_ID INTEGER REFERENCES character.Character(Character_ID),
+    Original_Text TEXT NOT NULL,
     Modernized_Text TEXT
 );
 
 -- Action Table
-CREATE TABLE IF NOT EXISTS Action (
+CREATE TABLE action.Action (
     Action_ID SERIAL PRIMARY KEY,
-    Scene_ID INTEGER,
-    Character_ID INTEGER,
-    Original_Text TEXT,
+    Scene_ID INTEGER REFERENCES scene.Scene(Scene_ID),
+    Character_ID INTEGER REFERENCES character.Character(Character_ID),
+    Original_Text TEXT NOT NULL,
     Modernized_Text TEXT
 );
 
 -- Transition Table
-CREATE TABLE IF NOT EXISTS Transition (
+CREATE TABLE transition.Transition (
     Transition_ID SERIAL PRIMARY KEY,
-    Scene_ID INTEGER,
-    Transition_Text TEXT
+    Scene_ID INTEGER REFERENCES scene.Scene(Scene_ID),
+    Transition_Text TEXT NOT NULL
 );
 
 -- Parenthetical Table
-CREATE TABLE IF NOT EXISTS Parenthetical (
+CREATE TABLE parenthetical.Parenthetical (
     Parenthetical_ID SERIAL PRIMARY KEY,
-    Dialogue_ID INTEGER,
-    Original_Text TEXT,
+    Dialogue_ID INTEGER REFERENCES dialogue.Dialogue(Dialogue_ID),
+    Original_Text TEXT NOT NULL,
     Modernized_Text TEXT
 );
 
 -- Note Table
-CREATE TABLE IF NOT EXISTS Note (
+CREATE TABLE note.Note (
     Note_ID SERIAL PRIMARY KEY,
-    Script_ID INTEGER,
-    Type TEXT,
-    Text TEXT
+    Script_ID INTEGER REFERENCES script.Script(Script_ID),
+    Type TEXT NOT NULL,
+    Text TEXT NOT NULL
 );
 
 -- CenteredText Table
-CREATE TABLE IF NOT EXISTS CenteredText (
+CREATE TABLE centeredtext.CenteredText (
     Centered_ID SERIAL PRIMARY KEY,
-    Script_ID INTEGER,
-    Text TEXT
+    Script_ID INTEGER REFERENCES script.Script(Script_ID),
+    Text TEXT NOT NULL
 );
 
 -- PageBreak Table
-CREATE TABLE IF NOT EXISTS PageBreak (
+CREATE TABLE pagebreak.PageBreak (
     Page_Break_ID SERIAL PRIMARY KEY,
-    Script_ID INTEGER,
-    Page_Number INTEGER
+    Script_ID INTEGER REFERENCES script.Script(Script_ID),
+    Page_Number INTEGER NOT NULL
 );
 
 -- SectionHeading Table
-CREATE TABLE IF NOT EXISTS SectionHeading (
+CREATE TABLE sectionheading.SectionHeading (
     Section_ID SERIAL PRIMARY KEY,
-    Script_ID INTEGER,
-    Text TEXT
+    Script_ID INTEGER REFERENCES script.Script(Script_ID),
+    Text TEXT NOT NULL
 );
 
 -- TitlePage Table
-CREATE TABLE IF NOT EXISTS TitlePage (
+CREATE TABLE titlepage.TitlePage (
     Title_Page_ID SERIAL PRIMARY KEY,
-    Script_ID INTEGER,
-    Text TEXT
+    Script_ID INTEGER REFERENCES script.Script(Script_ID),
+    Text TEXT NOT NULL
 );
 
 -- Casting Table
-CREATE TABLE IF NOT EXISTS Casting (
+CREATE TABLE casting.Casting (
     Casting_ID SERIAL PRIMARY KEY,
-    Character_ID INTEGER,
-    Actor_Characteristics_Choices TEXT
+    Character_ID INTEGER REFERENCES character.Character(Character_ID),
+    Actor_Characteristics_Choices TEXT NOT NULL
 );
 
 -- CharacterRelationship Table
-CREATE TABLE IF NOT EXISTS CharacterRelationship (
+CREATE TABLE characterrelationship.CharacterRelationship (
     Relationship_ID SERIAL PRIMARY KEY,
-    Character1_ID INTEGER,
-    Character2_ID INTEGER,
-    Relationship_Type TEXT
+    Character1_ID INTEGER REFERENCES character.Character(Character_ID),
+    Character2_ID INTEGER REFERENCES character.Character(Character_ID),
+    Relationship_Type TEXT NOT NULL
 );
 
 -- MusicSound Table
-CREATE TABLE IF NOT EXISTS MusicSound (
+CREATE TABLE musicsound.MusicSound (
     Music_Sound_ID SERIAL PRIMARY KEY,
-    Scene_ID INTEGER,
-    Cue TEXT,
-    Description TEXT
+    Scene_ID INTEGER REFERENCES scene.Scene(Scene_ID),
+    Cue TEXT NOT NULL,
+    Description TEXT NOT NULL
 );
 
 -- Props Table
-CREATE TABLE IF NOT EXISTS Props (
+CREATE TABLE props.Props (
     Prop_ID SERIAL PRIMARY KEY,
-    Scene_ID INTEGER,
-    Description TEXT
+    Scene_ID INTEGER REFERENCES scene.Scene(Scene_ID),
+    Description TEXT NOT NULL
 );
 
 -- RevisionHistory Table
-CREATE TABLE IF NOT EXISTS RevisionHistory (
+CREATE TABLE revisionhistory.RevisionHistory (
     Revision_ID SERIAL PRIMARY KEY,
-    Script_ID INTEGER,
-    Date DATE,
-    Change_Description TEXT,
-    Editor TEXT
+    Script_ID INTEGER REFERENCES script.Script(Script_ID),
+    Date DATE NOT NULL,
+    Change_Description TEXT NOT NULL,
+    Editor TEXT NOT NULL
 );
 
 -- FormattingRules Table
-CREATE TABLE IF NOT EXISTS FormattingRules (
+CREATE TABLE formattingrules.FormattingRules (
     Rule_ID SERIAL PRIMARY KEY,
-    Script_ID INTEGER,
-    Rule_Description TEXT
+    Script_ID INTEGER REFERENCES script.Script(Script_ID),
+    Rule_Description TEXT NOT NULL
 );
 
 -- CrossReferences Table
-CREATE TABLE IF NOT EXISTS CrossReferences (
+CREATE TABLE crossreferences.CrossReferences (
     Cross_Reference_ID SERIAL PRIMARY KEY,
-    Scene_ID INTEGER,
-    Referenced_Scene_ID INTEGER,
-    Description TEXT
+    Scene_ID INTEGER REFERENCES scene.Scene(Scene_ID),
+    Referenced_Scene_ID INTEGER NOT NULL,
+    Description TEXT NOT NULL
 );
 
 -- ExtendedNotesResearch Table
-CREATE TABLE IF NOT EXISTS ExtendedNotesResearch (
+CREATE TABLE extendednotesresearch.ExtendedNotesResearch (
     Research_ID SERIAL PRIMARY KEY,
-    Script_ID INTEGER,
-    Notes TEXT,
-    Research_Details TEXT
+    Script_ID INTEGER REFERENCES script.Script(Script_ID),
+    Notes TEXT NOT NULL,
+    Research_Details TEXT NOT NULL
 );
 
 -- SceneLocation Table
-CREATE TABLE IF NOT EXISTS SceneLocation (
+CREATE TABLE scenelocation.SceneLocation (
     Location_ID SERIAL PRIMARY KEY,
     Description TEXT NOT NULL,
     Historical_Cultural_Significance TEXT
@@ -558,7 +586,7 @@ CREATE TABLE IF NOT EXISTS SceneLocation (
 
 EOF
 
-echo "All tables have been created successfully."
+echo "All schemas and tables have been created successfully."
 ```
 
-Please ensure to replace `your_db_user`, `your_db_password`, and `your_db_name` with your actual PostgreSQL credentials and desired database name. This script assumes you have permission to connect to your PostgreSQL database and execute SQL commands. Before executing the script, ensure PostgreSQL is running and accessible with the provided credentials.
+Make sure to replace `your_db_user`, `your_db_password`, and `your_db_name` with the actual values for your PostgreSQL database user, password, and the name of your database. This script assumes you have the appropriate privileges to create schemas and tables in the PostgreSQL database. Before executing the script, ensure that PostgreSQL is installed and running, and that you can connect to it using the provided credentials.

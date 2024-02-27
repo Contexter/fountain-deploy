@@ -230,9 +230,7 @@ for i in "${!services[@]}"; do
     setup_service "${services[$i]}" "$i"
 done
 
-# Setting up SSL-secured Nginx virtual host for Go
-
-Access dashboard
+# Setting up SSL-secured Nginx virtual host for GoAccess dashboard
 GOACCESS_DOMAIN="logs.$base_domain"
 nginx_conf="$NGINX_VHOSTS_DIR/$GOACCESS_DOMAIN"
 if [ ! -f "$nginx_conf" ]; then

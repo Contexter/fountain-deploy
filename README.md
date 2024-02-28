@@ -59,8 +59,7 @@ Throughout the script, checks are in place to ensure that actions such as user a
 
 This setup script streamlines the deployment process for a complex microservices architecture, making it accessible even to users with limited backend configuration experience. It ensures a secure, robust, and scalable backend system ready to manage and serve theatrical script data efficiently.
 
-```bash
-#!/bin/bash
+```bash#!/bin/bash
 
 # Update system and install necessary packages
 apt-get update && apt-get upgrade -y
@@ -69,11 +68,19 @@ apt-get install -y postgresql postgresql-contrib nginx certbot python3-certbot-n
 # Install PostgREST v12.0.2 if not already installed
 POSTGREST_VERSION="v12.0.2"
 if [ ! -f "/usr/local/bin/postgrest" ]; then
-    wget https://github.com/PostgREST/postgrest/releases/download/${POSTGREST_VERSION}/postgrest-${POSTGREST_VERSION}-linux-x64-static.tar.xz -O postgrest.tar.xz
-    tar -xJf postgrest.tar.xz -C /usr/local/bin
-    rm postgrest.tar.xz
-    chmod +x /usr/local/bin/postgrest
-    echo "PostgREST installed."
+    # Correct URL for downloading PostgREST v12.0.2
+    wget https://github.com/PostgREST/postgrest/releases/download/${POSTGREST_VERSION}/postgrest-${POSTGREST_VERSION}-linux-static-x64.tar.xz -O postgrest.tar.xz
+    
+    # Verifies if the download was successful before attempting to extract
+    if [ $? -eq 0 ]; then
+        tar -xJf postgrest.tar.xz -C /usr/local/bin
+        rm postgrest.tar.xz
+        chmod +x /usr/local/bin/postgrest
+        echo "PostgREST installed."
+    else
+        echo "Failed to download PostgREST. Please check the URL and try again."
+        exit 1
+    fi
 else
     echo "PostgREST already installed."
 fi
@@ -231,7 +238,7 @@ for i in "${!services[@]}"; do
 done
 
 # Setting up SSL-secured Nginx virtual host for GoAccess dashboard
-GOACCESS_DOMAIN="logs.$base_domain"
+GOACCESS_DOMAIN="logs.$basedomain"
 nginx_conf="$NGINX_VHOSTS_DIR/$GOACCESS_DOMAIN"
 if [ ! -f "$nginx_conf" ]; then
     cat > "$nginx_conf" <<EOF
@@ -254,6 +261,7 @@ fi
 nginx -t && systemctl reload nginx
 
 echo "Setup completed. Fountain microservices, GoAccess monitoring, and SSL-secured GoAccess dashboard are configured."
+
 ```
 
 

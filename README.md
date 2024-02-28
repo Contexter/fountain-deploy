@@ -257,7 +257,7 @@ echo "Setup completed. Fountain microservices, GoAccess monitoring, and SSL-secu
 ```
 
 
-Note: Make sure the SQL script path (`/path/to/fountain_microservices_bootstrap.sql`) is correctly specified to match the location of your SQL file that contains the table creation commands.
+Note: so far , there are no tables created in the database - 
 
 ## And Now Test!
 

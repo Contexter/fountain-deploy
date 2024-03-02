@@ -1,0 +1,65 @@
+{
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "getRoot",
+        "tags": [
+          "Introspection"
+        ],
+        "summary": "OpenAPI description (this document)",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/script": {
+      "get": {
+        "operationId": "listScripts",
+        "tags": [
+          "script"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createScript",
+        "tags": [
+          "script"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteScript",
+        "tags": [
+          "script"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateScript",
+        "tags": [
+          "script"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    }
+  }
+}

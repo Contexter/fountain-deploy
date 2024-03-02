@@ -89,6 +89,21 @@ echo "Reminder: Adjust your PostgREST configuration to use the newly created rol
 echo "Ensure the 'db-schema' is set to '$SCHEMA', and 'db-anon-role' is updated to '$ROLE'."
 echo "Please ensure to restart your PostgREST services to apply changes."
 
+# Instructions for restarting PostgREST services to apply the changes
+echo -e "\nNOTE: To ensure that the changes take effect, you may need to restart your PostgREST services."
+echo "If you have set up PostgREST as a systemd service, you can restart all instances using the following commands:"
+
+echo -e "\nTo restart a specific PostgREST service:"
+echo "sudo systemctl restart postgrest-<schema>.service"
+
+echo -e "\nTo restart all PostgREST services (if you have multiple schemas set up):"
+echo "for service in \$(systemctl list-unit-files | grep -o 'postgrest-.*\.service'); do"
+echo "    sudo systemctl restart \$service"
+echo "done"
+
+echo -e "\nReplace <schema> with your actual schema name used in the systemd service file name."
+echo "This step is crucial if you have made changes to the PostgREST configuration or updated permissions that affect PostgREST's operation."
+
 ```
 
 

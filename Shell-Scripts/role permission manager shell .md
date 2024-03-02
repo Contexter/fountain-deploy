@@ -2,7 +2,7 @@ The provided Bash script is a comprehensive tool designed to facilitate the mana
 ```
 #!/bin/bash
 
-# Enhanced Script for Creating a Custom Role and Applying Permissions
+# Enhanced Script for Creating a Custom Role and Applying Permissions with Schema Selection
 
 echo "Enter the PostgreSQL database name:"
 read DB_NAME
@@ -10,11 +10,31 @@ echo "Enter the PostgreSQL database user (should have admin privileges):"
 read DB_USER
 echo "Enter the password for the database user (input will be hidden):"
 read -s DB_PASSWORD
+echo
 
-# Define the schema
-SCHEMA="script"
+# Define an array of schemas
+SCHEMAS=("playwright" "metadata" "script" "act" "scene" "character" "dialogue" "action" "transition" "parenthetical" "note" "centeredtext" "pagebreak" "sectionheading" "titlepage" "casting" "characterrelationship" "musicsound" "props" "revisionhistory" "formattingrules" "crossreferences" "extendednotesresearch" "scenelocation")
 
-# Prompt for custom role creation with input verification (letters only)
+echo "Available schemas:"
+for i in "${!SCHEMAS[@]}"; do
+    printf "%2d. %s\n" $((i+1)) "${SCHEMAS[$i]}"
+done
+
+echo "Select a schema by entering the number (1-${#SCHEMAS[@]}):"
+read SCHEMA_SELECTION
+
+# Validate schema selection
+if ! [[ "$SCHEMA_SELECTION" =~ ^[0-9]+$ ]] || [ "$SCHEMA_SELECTION" -lt 1 ] || [ "$SCHEMA_SELECTION" -gt "${#SCHEMAS[@]}" ]; then
+    echo "Invalid selection. Exiting script."
+    exit 1
+fi
+
+# Assign the selected schema
+SCHEMA="${SCHEMAS[$SCHEMA_SELECTION-1]}"
+
+echo "You selected the schema: $SCHEMA"
+
+# Proceed with role creation and permission application
 echo "Enter the name for the custom role (letters only):"
 read ROLE
 
@@ -28,7 +48,7 @@ export PGPASSWORD=$DB_PASSWORD
 
 # Check if the role exists, and create it if it doesn't
 echo "Checking if the role $ROLE exists..."
-ROLE_EXISTS=$(psql -h localhost -U $DB_USER -d $DB_NAME -tAc "SELECT 1 FROM pg_roles WHERE rolname='$ROL>
+ROLE_EXISTS=$(psql -h localhost -U $DB_USER -d $DB_NAME -tAc "SELECT 1 FROM pg_roles WHERE rolname='$ROLE'")
 if [ -z "$ROLE_EXISTS" ]; then
   echo "Role $ROLE does not exist. Creating role..."
   psql -h localhost -U $DB_USER -d $DB_NAME -c "CREATE ROLE $ROLE NOLOGIN;"
@@ -36,27 +56,29 @@ else
   echo "Role $ROLE already exists."
 fi
 
-# Proceed with the current script flow to apply permissions
+# Check current permissions for the role on the selected schema
 echo "Checking current permissions for the role $ROLE on schema $SCHEMA..."
-psql -h localhost -U $DB_USER -d $DB_NAME -c "SELECT table_name, has_table_privilege('$ROLE', quote_iden>
+psql -h localhost -U $DB_USER -d $DB_NAME -c "SELECT table_name, has_table_privilege('$ROLE', quote_ident(table_name), 'INSERT') as has_insert_permission FROM information_schema.tables WHERE table_schema = '$SCHEMA';"
 
+# Ask if the user wants to apply INSERT permissions
 echo "Do you want to apply INSERT permissions to $ROLE on all tables in schema $SCHEMA? (y/n):"
 read answer
 if [[ $answer =~ ^[Yy]$ ]]; then
     echo "Applying INSERT permissions..."
-    psql -h localhost -U $DB_USER -d $DB_NAME -c "GRANT INSERT ON ALL TABLES IN SCHEMA $SCHEMA TO $ROLE;>
+    psql -h localhost -U $DB_USER -d $DB_NAME -c "GRANT INSERT ON ALL TABLES IN SCHEMA $SCHEMA TO $ROLE; ALTER DEFAULT PRIVILEGES IN SCHEMA $SCHEMA GRANT INSERT ON TABLES TO $ROLE;"
     echo "Permissions applied. Please verify."
 else
     echo "Skipping permission application."
 fi
 
+# Clear the PostgreSQL password from the environment
 unset PGPASSWORD
 
-echo "Reminder: Adjust your PostgREST configuration to use the newly created role '$ROLE' for enhanced s>
+echo "Reminder: Adjust your PostgREST configuration to use the newly created role '$ROLE' for enhanced security. Ensure the 'db-schema' is set to '$SCHEMA', and 'db-anon-role' is updated to '$ROLE'."
 
-# Note on restarting PostgREST services
-echo -e "\nNOTE: To ensure that the changes take effect, you may need to restart your PostgREST services>
-echo "If you have set up PostgREST as a systemd service, you can restart all instances using the followi>
+# Instructions for restarting PostgREST services to apply the changes
+echo -e "\nNOTE: To ensure that the changes take effect, you may need to restart your PostgREST services."
+echo "If you have set up PostgREST as a systemd service, you can restart all instances using the following commands:"
 
 echo -e "\nTo restart a specific PostgREST service:"
 echo "sudo systemctl restart postgrest-<schema>.service"
@@ -67,7 +89,8 @@ echo "    sudo systemctl restart \$service"
 echo "done"
 
 echo -e "\nReplace <schema> with your actual schema name used in the systemd service file name."
-echo "This step is crucial if you have made changes to the PostgREST configuration or updated permission>
+echo "This step is crucial if you have made changes to the PostgREST configuration or updated permissions that affect PostgREST's operation."
+
 
 
 

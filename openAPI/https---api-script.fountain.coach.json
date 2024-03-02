@@ -17,6 +17,7 @@
   "paths": {
     "/": {
       "get": {
+        "operationId": "listScripts",
         "tags": [
           "Introspection"
         ],

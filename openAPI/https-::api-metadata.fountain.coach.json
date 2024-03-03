@@ -11,19 +11,19 @@
   },
   "servers": [
     {
-      "url": "https://api-playwright.fountain.coach"
+      "url": "https://api-metadata.fountain.coach"
     }
   ],
   "paths": {
-    "/playwright": {
+    "/metadata": {
       "get": {
-        "operationId": "getPlaywrights_by_id",
+        "operationId": "getMetadata",
         "tags": [
-          "playwright"
+          "metadata"
         ],
         "parameters": [
           {
-            "name": "author_id",
+            "name": "metadata_id",
             "in": "query",
             "schema": {
               "type": "string",
@@ -31,23 +31,31 @@
             }
           },
           {
-            "name": "name",
+            "name": "creation_date",
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "text"
+              "format": "date"
             }
           },
           {
-            "name": "biography",
+            "name": "last_modified_date",
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "text"
+              "format": "date"
             }
           },
           {
-            "name": "contact_information",
+            "name": "version_number",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "integer"
+            }
+          },
+          {
+            "name": "additional_information",
             "in": "query",
             "schema": {
               "type": "string",
@@ -123,7 +131,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/playwright"
+                    "$ref": "#/components/schemas/metadata"
                   }
                 }
               },
@@ -131,7 +139,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/playwright"
+                    "$ref": "#/components/schemas/metadata"
                   }
                 }
               },
@@ -139,7 +147,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/playwright"
+                    "$ref": "#/components/schemas/metadata"
                   }
                 }
               },
@@ -147,7 +155,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/playwright"
+                    "$ref": "#/components/schemas/metadata"
                   }
                 }
               }
@@ -160,9 +168,9 @@
         }
       },
       "post": {
-        "operationId": "postPlaywright",
+        "operationId": "postMetadata",
         "tags": [
-          "playwright"
+          "metadata"
         ],
         "parameters": [
           {
@@ -190,26 +198,26 @@
           }
         ],
         "requestBody": {
-          "description": "playwright",
+          "description": "metadata",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/playwright"
+                "$ref": "#/components/schemas/metadata"
               }
             },
             "application/vnd.pgrst.object+json;nulls=stripped": {
               "schema": {
-                "$ref": "#/components/schemas/playwright"
+                "$ref": "#/components/schemas/metadata"
               }
             },
             "application/vnd.pgrst.object+json": {
               "schema": {
-                "$ref": "#/components/schemas/playwright"
+                "$ref": "#/components/schemas/metadata"
               }
             },
             "text/csv": {
               "schema": {
-                "$ref": "#/components/schemas/playwright"
+                "$ref": "#/components/schemas/metadata"
               }
             }
           },
@@ -221,16 +229,16 @@
             "content": {}
           }
         },
-        "x-codegen-request-body-name": "playwright"
+        "x-codegen-request-body-name": "metadata"
       },
       "delete": {
-        "operationId": "deletePlaywright",
+        "operationId": "deleteMetadata",
         "tags": [
-          "playwright"
+          "metadata"
         ],
         "parameters": [
           {
-            "name": "author_id",
+            "name": "metadata_id",
             "in": "query",
             "schema": {
               "type": "string",
@@ -238,23 +246,31 @@
             }
           },
           {
-            "name": "name",
+            "name": "creation_date",
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "text"
+              "format": "date"
             }
           },
           {
-            "name": "biography",
+            "name": "last_modified_date",
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "text"
+              "format": "date"
             }
           },
           {
-            "name": "contact_information",
+            "name": "version_number",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "integer"
+            }
+          },
+          {
+            "name": "additional_information",
             "in": "query",
             "schema": {
               "type": "string",
@@ -283,13 +299,13 @@
         }
       },
       "patch": {
-        "operationId": "updatePlaywright",
+        "operationId": "updateMetadata",
         "tags": [
-          "playwright"
+          "metadata"
         ],
         "parameters": [
           {
-            "name": "author_id",
+            "name": "metadata_id",
             "in": "query",
             "schema": {
               "type": "string",
@@ -297,23 +313,31 @@
             }
           },
           {
-            "name": "name",
+            "name": "creation_date",
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "text"
+              "format": "date"
             }
           },
           {
-            "name": "biography",
+            "name": "last_modified_date",
             "in": "query",
             "schema": {
               "type": "string",
-              "format": "text"
+              "format": "date"
             }
           },
           {
-            "name": "contact_information",
+            "name": "version_number",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "integer"
+            }
+          },
+          {
+            "name": "additional_information",
             "in": "query",
             "schema": {
               "type": "string",
@@ -335,26 +359,26 @@
           }
         ],
         "requestBody": {
-          "description": "playwright",
+          "description": "metadata",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/playwright"
+                "$ref": "#/components/schemas/metadata"
               }
             },
             "application/vnd.pgrst.object+json;nulls=stripped": {
               "schema": {
-                "$ref": "#/components/schemas/playwright"
+                "$ref": "#/components/schemas/metadata"
               }
             },
             "application/vnd.pgrst.object+json": {
               "schema": {
-                "$ref": "#/components/schemas/playwright"
+                "$ref": "#/components/schemas/metadata"
               }
             },
             "text/csv": {
               "schema": {
-                "$ref": "#/components/schemas/playwright"
+                "$ref": "#/components/schemas/metadata"
               }
             }
           },
@@ -366,33 +390,36 @@
             "content": {}
           }
         },
-        "x-codegen-request-body-name": "playwright"
+        "x-codegen-request-body-name": "metadata"
       }
     }
   },
   "components": {
     "schemas": {
-      "playwright": {
+      "metadata": {
         "required": [
-          "author_id",
-          "name"
+          "metadata_id"
         ],
         "type": "object",
         "properties": {
-          "author_id": {
+          "metadata_id": {
             "type": "integer",
             "description": "Note:\nThis is a Primary Key.<pk/>",
             "format": "integer"
           },
-          "name": {
+          "creation_date": {
             "type": "string",
-            "format": "text"
+            "format": "date"
           },
-          "biography": {
+          "last_modified_date": {
             "type": "string",
-            "format": "text"
+            "format": "date"
           },
-          "contact_information": {
+          "version_number": {
+            "type": "integer",
+            "format": "integer"
+          },
+          "additional_information": {
             "type": "string",
             "format": "text"
           }
@@ -507,32 +534,40 @@
           "type": "string"
         }
       },
-      "rowFilter.playwright.author_id": {
-        "name": "author_id",
+      "rowFilter.metadata.metadata_id": {
+        "name": "metadata_id",
         "in": "query",
         "schema": {
           "type": "string",
           "format": "integer"
         }
       },
-      "rowFilter.playwright.name": {
-        "name": "name",
+      "rowFilter.metadata.creation_date": {
+        "name": "creation_date",
         "in": "query",
         "schema": {
           "type": "string",
-          "format": "text"
+          "format": "date"
         }
       },
-      "rowFilter.playwright.biography": {
-        "name": "biography",
+      "rowFilter.metadata.last_modified_date": {
+        "name": "last_modified_date",
         "in": "query",
         "schema": {
           "type": "string",
-          "format": "text"
+          "format": "date"
         }
       },
-      "rowFilter.playwright.contact_information": {
-        "name": "contact_information",
+      "rowFilter.metadata.version_number": {
+        "name": "version_number",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "format": "integer"
+        }
+      },
+      "rowFilter.metadata.additional_information": {
+        "name": "additional_information",
         "in": "query",
         "schema": {
           "type": "string",
@@ -541,27 +576,27 @@
       }
     },
     "requestBodies": {
-      "body.playwright": {
-        "description": "playwright",
+      "body.metadata": {
+        "description": "metadata",
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/playwright"
+              "$ref": "#/components/schemas/metadata"
             }
           },
           "application/vnd.pgrst.object+json;nulls=stripped": {
             "schema": {
-              "$ref": "#/components/schemas/playwright"
+              "$ref": "#/components/schemas/metadata"
             }
           },
           "application/vnd.pgrst.object+json": {
             "schema": {
-              "$ref": "#/components/schemas/playwright"
+              "$ref": "#/components/schemas/metadata"
             }
           },
           "text/csv": {
             "schema": {
-              "$ref": "#/components/schemas/playwright"
+              "$ref": "#/components/schemas/metadata"
             }
           }
         },

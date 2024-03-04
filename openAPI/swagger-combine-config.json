@@ -1,0 +1,86 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Combined Fountain Backend API",
+    "description": "A combined OpenAPI specification for the Fountain backend.",
+    "version": "1.0.0"
+  },
+  "apis": [
+    {
+      "url": "./https-::api-act.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-action.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-casting.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-centeredtext.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-character.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-characterrelationship.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-crossreferences.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-dialogue.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-extendednotesresearch.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-formattingrules.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-metadata.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-musicsound.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-note.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-pagebreak.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-parenthetical.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-playwright.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-props.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-revisionhistory.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-scene.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-scenelocation.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-script.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-sectionheading.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-titlepage.fountain.coach.json"
+    },
+    {
+      "url": "./https-::api-transition.fountain.coach.json"
+    }
+  ],
+  "output": {
+    "type": "json",
+    "path": "../combined_fountain_backend_api.json"
+  }
+}

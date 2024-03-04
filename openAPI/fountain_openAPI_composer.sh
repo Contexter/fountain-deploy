@@ -1,7 +1,13 @@
 #!/bin/bash
 
-# Define the directory containing OpenAPI specs
-SPEC_DIR="./openAPI"
+# Ask the user for the absolute path of the OpenAPI specs directory
+read -p "Enter the absolute path of the openAPI directory: " SPEC_DIR
+
+# Verify that the specified directory exists and is a directory
+if [ ! -d "$SPEC_DIR" ]; then
+    echo "The specified path does not exist or is not a directory."
+    exit 1
+fi
 
 # Define an array with the specific filenames of the OpenAPI specs
 SPEC_FILES=(

@@ -19,7 +19,7 @@ cd openAPI
 
 Create the installation script `install_swagger_tools.sh` with the following content:
 
-```bash
+```
 #!/bin/bash
 
 # Ensure running from the openAPI directory
@@ -32,9 +32,9 @@ sudo apt-get update
 echo "Installing jq..."
 sudo apt-get install -y jq
 
-echo "Installing Node.js and npm..."
-# Using NodeSource's binary distributions for a more recent version of Node.js
-curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+echo "Installing Node.js 18 LTS (Hydrogen) and npm..."
+# Using NodeSource's binary distributions for Node.js 18 LTS
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 # Verify installation

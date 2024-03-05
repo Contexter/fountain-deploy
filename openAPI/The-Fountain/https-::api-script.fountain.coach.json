@@ -15,21 +15,6 @@
     }
   ],
   "paths": {
-    "/": {
-      "get": {
-        "operationId": "getRoot",
-        "tags": [
-          "Introspection"
-        ],
-        "summary": "OpenAPI description (this document)",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {}
-          }
-        }
-      }
-    },
     "/script": {
       "get": {
         "operationId": "getScript",

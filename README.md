@@ -71,3 +71,43 @@ While this approach streamlines backend development and offers a scalable archit
 - **Monitoring and Maintenance**: Deploying PostgREST and nginx requires ongoing monitoring and maintenance to ensure high performance, address potential security vulnerabilities, and update configurations as your application evolves.
 
 Adopting this architecture can significantly reduce development overhead and time to market by automating API generation and leveraging nginx's robust features for security and performance.
+
+# Essential Concepts 
+
+Let's summarize the essential concepts necessary for understanding and implementing this powerful combination to create RESTful APIs from a PostgreSQL database. These tags encapsulate the key ideas, tools, and practices involved in the process:
+
+1. **PostgreSQL**: An advanced, open-source object-relational database system known for its reliability, robustness, and performance with an emphasis on extensibility and standards compliance.
+
+2. **PostgREST**: A standalone web server that turns your PostgreSQL database directly into a RESTful API, relying on the database's schema and security settings to define endpoints and operations.
+
+3. **RESTful API**: Architectural style for designing networked applications, emphasizing stateless communication and leveraging standard HTTP methods (GET, POST, PUT, DELETE) for actions.
+
+4. **Schema Design**: The structure of a database organized as a blueprint of how the database is constructed, divided into tables, views, and relations among them.
+
+5. **HTTP Methods**: The set of request methods to indicate the desired action to be performed for a given resource, including GET, POST, PUT, PATCH, DELETE, etc.
+
+6. **JWT Authentication**: A method for securely transmitting information between parties as a JSON object, commonly used for securing APIs and managing user sessions.
+
+7. **SQL (Structured Query Language)**: A domain-specific language used in programming and designed for managing data held in a relational database management system.
+
+8. **CRUD Operations**: The four basic operations of persistent storage: Create, Read, Update, Delete.
+
+9. **Row-Level Security (RLS)**: A feature of PostgreSQL that allows control over which rows a user is allowed to see or modify, based on user-defined policies.
+
+10. **Views and Materialized Views**: Database objects that are the result of a query. Views are virtual tables representing the result of a SELECT statement, whereas materialized views are stored on disk.
+
+11. **Stored Procedures and Functions**: Database objects that encapsulate a set of operations or queries to execute in the database. They can take arguments, perform complex calculations, and return results.
+
+12. **nginx**: An HTTP and reverse proxy server, as well as a mail proxy server, known for its high performance, stability, rich feature set, simple configuration, and low resource consumption.
+
+13. **API Versioning**: The process of assigning an identifier to different versions of an API to manage changes over time without breaking compatibility.
+
+14. **Environment Configuration**: The process of setting up software and hardware specifications of the system where the application runs, including variables and settings critical for its operation.
+
+15. **Security Best Practices**: Guidelines and techniques for protecting data and ensuring the integrity and confidentiality of information processed by the application.
+
+16. **Performance Tuning**: Techniques used to improve system performance, such as optimizing database queries, indexing, and configuring server parameters.
+
+17. **Documentation**: The written text or illustration that accompanies software or hardware, explaining how it operates or how to use it.
+
+These tags represent the foundational knowledge and skills needed to effectively use PostgreSQL and PostgREST together for creating and managing APIs. Understanding these concepts will provide a solid base for building scalable, secure, and efficient web services.

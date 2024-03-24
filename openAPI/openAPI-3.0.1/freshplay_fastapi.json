@@ -8,7 +8,7 @@
     "/": {
       "get": {
         "summary": "Read Root",
-        "operationId": "read_root__get",
+        "operationId": "readRoot",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -26,7 +26,7 @@
       "post": {
         "summary": "Create Play",
         "description": "Create a new play in the database.\n\n- **title**: The title of the play.\n- **author**: The author of the play.",
-        "operationId": "create_play_plays__post",
+        "operationId": "createPlay",
         "requestBody": {
           "required": true,
           "content": {
@@ -63,7 +63,7 @@
       "get": {
         "summary": "Read Plays",
         "description": "Retrieve a list of plays, with pagination.\n\n- **skip**: How many plays to skip (for pagination).\n- **limit**: How many plays to return (for pagination).",
-        "operationId": "read_plays_plays__get",
+        "operationId": "readPlays",
         "parameters": [
           {
             "name": "skip",
@@ -96,7 +96,7 @@
                   "items": {
                     "$ref": "#/components/schemas/Play"
                   },
-                  "title": "Response Read Plays Plays  Get"
+                  "title": "Response Read Plays "
                 }
               }
             }
@@ -118,7 +118,7 @@
       "get": {
         "summary": "Read Play",
         "description": "Retrieve a play by its ID.\n\n- **play_id**: The unique identifier of the play.",
-        "operationId": "read_play_plays__play_id__get",
+        "operationId": "readPlayByID",
         "parameters": [
           {
             "name": "play_id",
@@ -156,7 +156,7 @@
       "put": {
         "summary": "Update Play",
         "description": "Update a play's details.\n\n- **title**: The new title of the play (optional).\n- **author**: The new author of the play (optional).",
-        "operationId": "update_play_plays__play_id__put",
+        "operationId": "updatePlay",
         "parameters": [
           {
             "name": "play_id",
@@ -204,7 +204,7 @@
       "delete": {
         "summary": "Delete Play",
         "description": "Delete a play by its ID.\n\n- **play_id**: The unique identifier of the play to be deleted.",
-        "operationId": "delete_play_plays__play_id__delete",
+        "operationId": "deletePlay",
         "parameters": [
           {
             "name": "play_id",
@@ -244,7 +244,7 @@
       "post": {
         "summary": "Create Act",
         "description": "Create a new act in the database.",
-        "operationId": "create_act_acts__post",
+        "operationId": "createAct",
         "requestBody": {
           "required": true,
           "content": {
@@ -281,7 +281,7 @@
       "get": {
         "summary": "Read Acts",
         "description": "Retrieve a list of acts, with pagination.",
-        "operationId": "read_acts_acts__get",
+        "operationId": "readActs",
         "parameters": [
           {
             "name": "skip",
@@ -314,7 +314,7 @@
                   "items": {
                     "$ref": "#/components/schemas/Act"
                   },
-                  "title": "Response Read Acts Acts  Get"
+                  "title": "Response Read Acts"
                 }
               }
             }
@@ -336,7 +336,7 @@
       "get": {
         "summary": "Read Act",
         "description": "Retrieve an act by its ID.",
-        "operationId": "read_act_acts__act_id__get",
+        "operationId": "readActByID",
         "parameters": [
           {
             "name": "act_id",
@@ -374,7 +374,7 @@
       "put": {
         "summary": "Update Act",
         "description": "Update an act's details.",
-        "operationId": "update_act_acts__act_id__put",
+        "operationId": "updateAct",
         "parameters": [
           {
             "name": "act_id",
@@ -422,7 +422,7 @@
       "delete": {
         "summary": "Delete Act",
         "description": "Delete an act by its ID.",
-        "operationId": "delete_act_acts__act_id__delete",
+        "operationId": "deleteActByID",
         "parameters": [
           {
             "name": "act_id",
@@ -462,7 +462,7 @@
       "post": {
         "summary": "Create Scene",
         "description": "Create a new scene in the database.",
-        "operationId": "create_scene_scenes__post",
+        "operationId": "createScene",
         "requestBody": {
           "required": true,
           "content": {
@@ -499,7 +499,7 @@
       "get": {
         "summary": "Read Scenes",
         "description": "Retrieve a list of scenes with optional pagination.",
-        "operationId": "read_scenes_scenes__get",
+        "operationId": "readScenes",
         "parameters": [
           {
             "name": "skip",
@@ -554,7 +554,7 @@
       "get": {
         "summary": "Read Scene",
         "description": "Retrieve a scene by its ID.",
-        "operationId": "read_scene_scenes__scene_id__get",
+        "operationId": "readSceneByID",
         "parameters": [
           {
             "name": "scene_id",
@@ -592,7 +592,7 @@
       "put": {
         "summary": "Update Scene",
         "description": "Update a scene's details.",
-        "operationId": "update_scene_scenes__scene_id__put",
+        "operationId": "updateScene",
         "parameters": [
           {
             "name": "scene_id",
@@ -640,7 +640,7 @@
       "delete": {
         "summary": "Delete Scene",
         "description": "Delete a scene by its ID.",
-        "operationId": "delete_scene_scenes__scene_id__delete",
+        "operationId": "deleteSceneByID",
         "parameters": [
           {
             "name": "scene_id",
@@ -680,7 +680,7 @@
       "post": {
         "summary": "Create Character",
         "description": "Create a new character in the database.\n\n- **play_id**: The ID of the play the character belongs to.\n- **name**: The name of the character.",
-        "operationId": "create_character_characters__post",
+        "operationId": "createCharacter",
         "requestBody": {
           "required": true,
           "content": {
@@ -717,7 +717,7 @@
       "get": {
         "summary": "Read Characters",
         "description": "Retrieve a list of characters, with pagination.\n\n- **skip**: How many characters to skip (for pagination).\n- **limit**: How many characters to return (for pagination).",
-        "operationId": "read_characters_characters__get",
+        "operationId": "readCharacters",
         "parameters": [
           {
             "name": "skip",
@@ -772,7 +772,7 @@
       "get": {
         "summary": "Read Character",
         "description": "Retrieve a character by its ID.",
-        "operationId": "read_character_characters__character_id__get",
+        "operationId": "readCharacterByID",
         "parameters": [
           {
             "name": "character_id",
@@ -810,7 +810,7 @@
       "put": {
         "summary": "Update Character",
         "description": "Update a character's details.",
-        "operationId": "update_character_characters__character_id__put",
+        "operationId": "updateCharacter",
         "parameters": [
           {
             "name": "character_id",
@@ -858,7 +858,7 @@
       "delete": {
         "summary": "Delete Character",
         "description": "Delete a character by its ID.",
-        "operationId": "delete_character_characters__character_id__delete",
+        "operationId": "deleteCharacter",
         "parameters": [
           {
             "name": "character_id",
@@ -897,7 +897,7 @@
     "/dialogues/": {
       "post": {
         "summary": "Create Dialogue",
-        "operationId": "create_dialogue_dialogues__post",
+        "operationId": "createDialogue",
         "requestBody": {
           "required": true,
           "content": {
@@ -933,7 +933,7 @@
       },
       "get": {
         "summary": "Read Dialogues",
-        "operationId": "read_dialogues_dialogues__get",
+        "operationId": "readDialogues",
         "parameters": [
           {
             "name": "skip",
@@ -987,7 +987,7 @@
     "/dialogues/{dialogue_id}": {
       "get": {
         "summary": "Read Dialogue",
-        "operationId": "read_dialogue_dialogues__dialogue_id__get",
+        "operationId": "readDialogueByID",
         "parameters": [
           {
             "name": "dialogue_id",
@@ -1024,7 +1024,7 @@
       },
       "put": {
         "summary": "Update Dialogue",
-        "operationId": "update_dialogue_dialogues__dialogue_id__put",
+        "operationId": "updateDialogue",
         "parameters": [
           {
             "name": "dialogue_id",
@@ -1071,7 +1071,7 @@
       },
       "delete": {
         "summary": "Delete Dialogue",
-        "operationId": "delete_dialogue_dialogues__dialogue_id__delete",
+        "operationId": "deleteDialogue",
         "parameters": [
           {
             "name": "dialogue_id",

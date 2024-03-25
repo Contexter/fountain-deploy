@@ -1,0 +1,188 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "GitHub Advanced Data Processor API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/repos/{owner}/{repo}/all-files": {
+      "get": {
+        "summary": "List all files in a repository",
+        "description": "Lists all files in a repository, taking pagination into account.\n\nPath Parameters:\nowner (str): The owner of the repository.\nrepo (str): The repository name.\n\nReturns:\n    List[dict]: A list of all files in the repository.",
+        "operationId": "listAllFilesInRepoOfOwner",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Owner"
+            }
+          },
+          {
+            "name": "repo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Repo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repos/{owner}/{repo}/file-content": {
+      "get": {
+        "summary": "Fetch specific lines from a text file in a repository",
+        "description": "Fetches and returns specific lines from a text file in a GitHub repository.\n\nPath Parameters:\nowner (str): The owner of the repository.\nrepo (str): The repository name.\nfile_path (str): The path to the text file within the repository.\n\nQuery Parameters:\nstart_line (int): The line number to start fetching lines from.\nend_line (int): The line number to stop fetching lines at.\n\nReturns:\n    dict: A dictionary containing the requested lines of the text file.",
+        "operationId": "FetchFileContentByFilePathAndLineNumbersFromTo",
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Owner"
+            }
+          },
+          {
+            "name": "repo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Repo"
+            }
+          },
+          {
+            "name": "file_path",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "File Path"
+            }
+          },
+          {
+            "name": "start_line",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Starting line number",
+              "default": 0,
+              "title": "Start Line"
+            },
+            "description": "Starting line number"
+          },
+          {
+            "name": "end_line",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Ending line number",
+              "default": 0,
+              "title": "End Line"
+            },
+            "description": "Ending line number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

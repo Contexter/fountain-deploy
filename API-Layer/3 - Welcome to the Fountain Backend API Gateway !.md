@@ -1,6 +1,6 @@
 # Performing Cascading Management 
 
-Considering the problems faced when walking the Foreign Key contrained path, let's consider no changes in the micro services - here is a description of  the implementation of an API Gateway that performs cascading management of the:  script , act, scene, action, character, parenthetical, dialogue and transition tables:
+Considering the problems faced when walking the Foreign Key contrained path, let's consider no changes in the micro services - here is a description of  the implementation of an API Gateway that performs cascading management:
 
 Implementing an API Gateway that performs cascading management of script-related data in a microservices architecture, without altering the underlying microservices, involves creating a layer that abstracts the complexity of interactions among various services. This layer will manage operations on the `Script`, `Act`, `Scene`, `Action`, `Character`, `Parenthetical`, `Dialogue`, and `Transition` tables in a coordinated manner, ensuring that actions affecting one service cascade through to related services as appropriate. Here's a comprehensive strategy for this implementation:
 

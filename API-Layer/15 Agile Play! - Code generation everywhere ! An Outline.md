@@ -104,3 +104,110 @@ This command, when run in the project root, would:
 ### Final Thoughts
 
 Implementing a fully automated code generation tool that respects existing project structures and minimizes user intervention is a complex but achievable goal. The outlined adjustments and command streamline the process, making it more user-friendly and less prone to error or confusion. This approach ensures that the heavy lifting of code generation is managed by the tool, allowing the user to focus on more critical design and development aspects of their FastAPI application.
+
+### ... and a try on shell scripting !
+
+here it's !:
+
+To directly address the requirement for a fully automated, practical script that sets up a FastAPI project with Alembic, generates models, schemas, CRUD operations, API routes, and handles Alembic migrations without manual adjustments, here is a concise version. This script will perform the specified tasks based on a given SQL definition, automatically integrating with Alembic for migrations. 
+
+Please adjust the placeholders and paths as per your project's specifics.
+
+```bash
+#!/bin/bash
+
+# Define project structure directories
+PROJECT_ROOT=$(pwd)
+APP_DIR="$PROJECT_ROOT/app"
+DB_DIR="$APP_DIR/db"
+MODELS_DIR="$DB_DIR/models"
+SCHEMAS_DIR="$APP_DIR/schemas"
+CRUD_DIR="$APP_DIR/crud"
+API_DIR="$APP_DIR/api/routes"
+ALEMBIC_DIR="$PROJECT_ROOT/alembic"
+
+# Ensure necessary directories exist
+mkdir -p $MODELS_DIR $SCHEMAS_DIR $CRUD_DIR $API_DIR
+
+# Check if Alembic is initialized; if not, initialize
+if [ ! -d "$ALEMBIC_DIR" ]; then
+    alembic init $ALEMBIC_DIR
+fi
+
+# Update Alembic's env.py to auto-import models
+sed -i "/^target_metadata = None/a import os, sys\nsys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))\nfrom app.db.base_class import Base  # adjust import as necessary\ntarget_metadata = Base.metadata" $ALEMBIC_DIR/env.py
+
+# Generate SQLAlchemy Model
+echo "from sqlalchemy import Column, Integer, String, Text
+from .base_class import Base  # adjust this import based on your project
+
+class Playwright(Base):
+    __tablename__ = 'playwright'
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    biography = Column(Text, nullable=True)
+    contact_information = Column(Text, nullable=True)" > $MODELS_DIR/playwright.py
+
+# Generate Pydantic Schema
+echo "from pydantic import BaseModel
+
+class PlaywrightBase(BaseModel):
+    name: str
+    biography: str | None = None
+    contact_information: str | None = None
+
+class PlaywrightCreate(PlaywrightBase):
+    pass
+
+class PlaywrightInDB(PlaywrightBase):
+    id: int
+
+    class Config:
+        orm_mode = True" > $SCHEMAS_DIR/playwright.py
+
+# Generate CRUD Operations
+echo "from sqlalchemy.orm import Session
+from .models.playwright import Playwright  # adjust this import based on your project
+
+def get_playwright(db: Session, playwright_id: int):
+    return db.query(Playwright).filter(Playwright.id == playwright_id).first()
+
+def create_playwright(db: Session, playwright):
+    db_playwright = Playwright(**playwright.dict())
+    db.add(db_playwright)
+    db.commit()
+    db.refresh(db_playwright)
+    return db_playwright" > $CRUD_DIR/playwright.py
+
+# Generate API Routes
+echo "from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from typing import List
+from ..crud.playwright import get_playwright, create_playwright
+from ..schemas.playwright import PlaywrightCreate, PlaywrightInDB
+from ..dependencies import get_db
+
+router = APIRouter()
+
+@router.post('/playwright/', response_model=PlaywrightInDB)
+def create_playwright(playwright: PlaywrightCreate, db: Session = Depends(get_db)):
+    return create_playwright(db=db, playwright=playwright)
+
+@router.get('/playwright/{playwright_id}', response_model=PlaywrightInDB)
+def get_playwright(playwright_id: int, db: Session = Depends(get_db)):
+    db_playwright = get_playwright(db=db, playwright_id=playwright_id)
+    if db_playwright is None:
+        raise HTTPException(status_code=404, detail='Playwright not found')
+    return db_playwright" > $API_DIR/playwright.py
+
+# Navigate to Alembic directory, generate migration for the models, and upgrade the database
+cd $ALEMBIC_DIR
+alembic revision --autogenerate -m "Added Playwright model"
+alembic upgrade head
+cd $PROJECT_ROOT
+
+echo "FastAPI application components and Alembic migrations for 'Playwright' have been successfully generated and applied."
+```
+
+
+

@@ -1,6 +1,8 @@
-# The New Fountain
+# The New Fountain v.1
 
 To conceptualize the new Fountain with attributes and types, let's structure it as a set of classes (akin to programming objects). This structure will highlight how various components of the play! system could interact within a microservices architecture, considering the **document**, **core**, and **supplementary** elements.
+
+[![N|Solid](https://coach.benedikt-eickhoff.de/koken/storage/cache/images/000/705/Bild-10,xlarge.1712221972.jpeg)]
 
 #### Document Elements
 1. **FormattingRule**

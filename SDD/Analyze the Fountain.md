@@ -42,3 +42,11 @@ with
 - `MetaData`missing , 
 - `Action` being an ambiguous concept, possibly better grouped under the **Core Elements** & 
 - `Playwright` becoming a required field of the `Script` resource ... 
+- 
+
+# Revised Grouping 
+
+- **Document Elements** : `FormattingRule`, `TitlePage`, `RevisionHistory`, `Casting`, `CharacterRelationship`
+- **Core Elements** : `Script`, `SectionHeading`, `Action`, `Character`, `Dialogue`, `Parenthetical` `CrossReference`
+- **Supplementary Elements** :  `Transition`, `CenteredText`, `Note`, `MusicSound`
+

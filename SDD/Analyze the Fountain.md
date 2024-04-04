@@ -36,3 +36,9 @@ Next steps involve creating the OpenAPI document, which outlines endpoints for a
 - **Structural Elements**: `PageBreak`, `SectionHeading`, `TitlePage`
 - **Production Elements**: `Casting`, `CharacterRelationship`, `MusicSound`, `Props`
 - **Document Elements**: `RevisionHistory`, `FormattingRules`, `CrossReferences`, `ExtendedNotesResearch`, `SceneLocation`
+- 
+
+with 
+- `MetaData`missing , 
+- `Action` being an ambiguous concept, possibly better grouped under the **Core Elements** & 
+- `Playwright` becoming a required field of the `Script` resource ... 

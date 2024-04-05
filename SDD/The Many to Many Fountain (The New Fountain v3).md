@@ -11,6 +11,7 @@
     - title: string
     - description: string
     - author: string
+    - sequence: int
   - Dependencies: Container for SectionHeading, Action, SpokenWord, Character, Transition, Note, MusicSound. Acts as a repository for formatting rules applicable to these elements.
 
 - **SectionHeading**
@@ -18,6 +19,7 @@
     - headingId: int
     - scriptId: int
     - title: string
+    - sequence: int
 
 - **Action**
   - Attributes:
@@ -36,6 +38,7 @@
     - characterId: int
     - name: string
     - description: string
+    - sequence: int
 
 #### Supplementary Elements
 

@@ -11,6 +11,7 @@
     - title: string
     - description: string
     - author: string
+    - sequence: int
   - Dependencies: Container for SectionHeading, Action, SpokenWord, Character, Transition, Note, MusicSound. Acts as a repository for formatting rules applicable to these elements.
 
 - **SectionHeading**
@@ -18,6 +19,7 @@
     - headingId: int
     - scriptId: int
     - title: string
+    - sequence: int
 
 - **Action**
   - Attributes:
@@ -36,6 +38,7 @@
     - characterId: int
     - name: string
     - description: string
+    - sequence: int
 
 #### Supplementary Elements
 
@@ -78,4 +81,3 @@
   - Dependencies: Belongs to Script. Now, it can also be targeted by CrossReferences, providing a link between revisions and other script elements.
 
 This revised dependency list incorporates the new connection between "CrossReference" and "RevisionHistory," further enhancing the model's capacity for detailed, interconnected script management and documentation.
-

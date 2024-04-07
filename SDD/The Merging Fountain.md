@@ -169,3 +169,13 @@ package.json file under devDependencies for the entry, or by running:
 npm list openapi-merge
 ```
 This command should output the version of openapi-merge that was installed, confirming it's now part of your project dependencies.
+
+# Swagger-Combine (reccomended)
+
+install it on Replit.com with
+```
+npm install swagger-combine
+```
+
+Check the Github repo for more information on Swagger-Combine at
+https://github.com/maxdome/swagger-combine

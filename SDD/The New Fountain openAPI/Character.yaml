@@ -1,0 +1,143 @@
+openapi: 3.0.1
+info:
+  title: Character Management API
+  description: API for managing characters within a screenplay application, allowing for characters to exist independently of scripts.
+  version: "1.0.0"
+servers:
+  - url: 'https://character.fountain.coach'
+paths:
+  /characters:
+    get:
+      summary: Lists all characters
+      operationId: listCharacters
+      responses:
+        '200':
+          description: An array of characters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Character'
+        '500':
+          description: Internal server error
+    post:
+      summary: Create a new character
+      operationId: createCharacter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CharacterCreateRequest'
+      responses:
+        '201':
+          description: Character successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /characters/{characterId}:
+    parameters:
+      - name: characterId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get a character by its ID
+      operationId: getCharacterById
+      responses:
+        '200':
+          description: Character details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        '404':
+          description: Character not found
+        '500':
+          description: Internal server error
+    put:
+      summary: Update a character by its ID
+      operationId: updateCharacter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CharacterUpdateRequest'
+      responses:
+        '200':
+          description: Character successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        '400':
+          description: Bad request
+        '404':
+          description: Character not found
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete a character by its ID
+      operationId: deleteCharacter
+      responses:
+        '204':
+          description: Character successfully deleted
+        '404':
+          description: Character not found
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Character:
+      type: object
+      properties:
+        characterId:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Juliet"
+        description:
+          type: string
+          example: "The heroine of Romeo and Juliet."
+        scriptIds:
+          type: array
+          items:
+            type: integer
+          description: "Array of script IDs where the character appears. Can be empty if character is not currently part of any script."
+          example: [2, 5, 7]
+      required:
+        - name
+
+    CharacterCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Juliet"
+        description:
+          type: string
+          example: "The heroine of Romeo and Juliet."
+      required:
+        - name
+
+    CharacterUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Juliet Capulet"
+        description:
+          type: string
+          example: "A detailed description of Juliet, including background and role in the story."
+

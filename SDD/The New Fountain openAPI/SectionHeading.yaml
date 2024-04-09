@@ -1,0 +1,108 @@
+openapi: 3.0.1
+info:
+  title: Script Management API
+  description: API to manage scripts and their components, including Section Headings and Cross References, facilitating complex many-to-many relationships.
+  version: "1.0.0"
+servers:
+  - url: 'https://api.yourdomain.com/v1'
+paths:
+  /sectionHeadings:
+    get:
+      summary: Get a list of Section Headings
+      operationId: listSectionHeadings
+      responses:
+        '200':
+          description: A JSON array of Section Headings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SectionHeading'
+    post:
+      summary: Create a new Section Heading
+      operationId: createSectionHeading
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SectionHeading'
+      responses:
+        '201':
+          description: Section Heading created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SectionHeading'
+  /crossReferences:
+    get:
+      summary: Get a list of Cross References
+      operationId: listCrossReferences
+      responses:
+        '200':
+          description: A JSON array of Cross References
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrossReference'
+    post:
+      summary: Create a new Cross Reference
+      operationId: createCrossReference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrossReference'
+      responses:
+        '201':
+          description: Cross Reference created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrossReference'
+components:
+  schemas:
+    SectionHeading:
+      type: object
+      properties:
+        headingId:
+          type: integer
+          description: Unique identifier for the Section Heading
+        scriptId:
+          type: integer
+          description: Identifier of the Script this Section Heading belongs to
+        title:
+          type: string
+          description: Title of the Section Heading
+        sequence:
+          type: integer
+          description: Order sequence of the Section Heading within the script
+      required:
+        - scriptId
+        - title
+        - sequence
+    CrossReference:
+      type: object
+      properties:
+        referenceId:
+          type: integer
+          description: Unique identifier for the Cross Reference
+        sourceElementId:
+          type: integer
+          description: ID of the source element in the Cross Reference relationship
+        targetType:
+          type: string
+          description: The type of target element (e.g., SectionHeading, Action, etc.)
+        targetId:
+          type: integer
+          description: ID of the target element in the Cross Reference relationship, if applicable
+        description:
+          type: string
+          description: Description or notes about the Cross Reference
+      required:
+        - sourceElementId
+        - targetType

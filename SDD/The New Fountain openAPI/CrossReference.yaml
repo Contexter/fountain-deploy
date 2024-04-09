@@ -1,0 +1,154 @@
+openapi: 3.0.1
+info:
+  title: CrossReference Management API
+  description: API for managing cross-references between screenplay elements to enhance narrative and structural complexity.
+  version: "1.0.0"
+servers:
+  - url: 'https://crossreference.fountain.coach'
+paths:
+  /crossreferences:
+    get:
+      summary: Lists all cross-references
+      operationId: listCrossReferences
+      responses:
+        '200':
+          description: An array of cross-references
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrossReference'
+        '500':
+          description: Internal server error
+    post:
+      summary: Create a new cross-reference
+      operationId: createCrossReference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrossReferenceCreateRequest'
+      responses:
+        '201':
+          description: CrossReference successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrossReference'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /crossreferences/{crossReferenceId}:
+    parameters:
+      - name: crossReferenceId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get a cross-reference by its ID
+      operationId: getCrossReferenceById
+      responses:
+        '200':
+          description: CrossReference details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrossReference'
+        '404':
+          description: CrossReference not found
+        '500':
+          description: Internal server error
+    put:
+      summary: Update a cross-reference by its ID
+      operationId: updateCrossReference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrossReferenceUpdateRequest'
+      responses:
+        '200':
+          description: CrossReference successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrossReference'
+        '400':
+          description: Bad request
+        '404':
+          description: CrossReference not found
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete a cross-reference by its ID
+      operationId: deleteCrossReference
+      responses:
+        '204':
+          description: CrossReference successfully deleted
+        '404':
+          description: CrossReference not found
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    CrossReference:
+      type: object
+      properties:
+        crossReferenceId:
+          type: integer
+          example: 1
+        sourceElementId:
+          type: integer
+          example: 2
+        targetType:
+          type: string
+          example: "Character"
+        targetId:
+          type: integer
+          example: 3
+        description:
+          type: string
+          example: "References the character's first appearance."
+      required:
+        - sourceElementId
+        - targetType
+
+    CrossReferenceCreateRequest:
+      type: object
+      properties:
+        sourceElementId:
+          type: integer
+        targetType:
+          type: string
+        targetId:
+          type: integer
+          description: "Optional, used when targetType is a specific named entity."
+        description:
+          type: string
+      required:
+        - sourceElementId
+        - targetType
+
+    CrossReferenceUpdateRequest:
+      type: object
+      properties:
+        sourceElementId:
+          type: integer
+          description: "Optional, to update the source element ID."
+        targetType:
+          type: string
+          description: "Optional, to update the target type."
+        targetId:
+          type: integer
+          description: "Optional, used when targetType is a specific named entity."
+        description:
+          type: string
+          description: "Optional, to update the description of the cross-reference."
+

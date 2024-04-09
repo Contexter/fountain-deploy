@@ -1,0 +1,196 @@
+openapi: 3.0.1
+info:
+  title: Script Elements API
+  description: API for managing script elements including Transition and CrossReference instances.
+  version: 1.0.0
+servers:
+  - url: 'https://example.com/api'
+paths:
+  /transitions:
+    get:
+      summary: Get a list of Transitions
+      responses:
+        '200':
+          description: A list of Transitions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transition'
+    post:
+      summary: Create a new Transition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transition'
+      responses:
+        '201':
+          description: Created Transition.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transition'
+  /transitions/{transitionId}:
+    get:
+      summary: Get a Transition by ID
+      parameters:
+        - name: transitionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single Transition.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transition'
+    put:
+      summary: Update a Transition by ID
+      parameters:
+        - name: transitionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transition'
+      responses:
+        '200':
+          description: Updated Transition.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transition'
+    delete:
+      summary: Delete a Transition by ID
+      parameters:
+        - name: transitionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Transition deleted.
+  /crossReferences:
+    post:
+      summary: Create a new CrossReference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrossReference'
+      responses:
+        '201':
+          description: Created CrossReference.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrossReference'
+    get:
+      summary: Get a list of CrossReferences
+      responses:
+        '200':
+          description: A list of CrossReferences.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrossReference'
+  /crossReferences/{referenceId}:
+    get:
+      summary: Get a CrossReference by ID
+      parameters:
+        - name: referenceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single CrossReference.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrossReference'
+    put:
+      summary: Update a CrossReference by ID
+      parameters:
+        - name: referenceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrossReference'
+      responses:
+        '200':
+          description: Updated CrossReference.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrossReference'
+    delete:
+      summary: Delete a CrossReference by ID
+      parameters:
+        - name: referenceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: CrossReference deleted.
+components:
+  schemas:
+    Transition:
+      type: object
+      properties:
+        transitionId:
+          type: integer
+          description: The unique identifier for a Transition.
+        description:
+          type: string
+          description: A description of the Transition.
+        sequence:
+          type: integer
+          description: The sequence order of the Transition.
+      required:
+        - description
+        - sequence
+    CrossReference:
+      type: object
+      properties:
+        referenceId:
+          type: integer
+          description: The unique identifier for a CrossReference.
+        sourceElementId:
+          type: integer
+          description: The ID of the source script element.
+        targetType:
+          type: string
+          description: The type of target entity (one, all, or a specific named entity type).
+        targetId:
+          type: integer
+          description: The ID of the target entity (optional, used when targetType is a specific named entity).
+        description:
+          type: string
+          description: A description of the cross-reference.
+      required:
+        - sourceElementId
+        - targetType

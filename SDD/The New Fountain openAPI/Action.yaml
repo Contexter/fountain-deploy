@@ -1,0 +1,117 @@
+openapi: 3.0.1
+info:
+  title: Action API
+  description: API for managing Action entities within a script management system.
+  version: "1.0"
+servers:
+  - url: https://example.com/api/v1
+paths:
+  /actions:
+    get:
+      summary: Get a list of actions
+      operationId: listActions
+      tags:
+        - Actions
+      responses:
+        '200':
+          description: A list of actions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Action'
+    post:
+      summary: Create a new action
+      operationId: createAction
+      tags:
+        - Actions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Action'
+      responses:
+        '201':
+          description: The created action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Action'
+  /actions/{actionId}:
+    get:
+      summary: Get a specific action by ID
+      operationId: getActionById
+      tags:
+        - Actions
+      parameters:
+        - name: actionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The requested action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Action'
+    put:
+      summary: Update an action
+      operationId: updateAction
+      tags:
+        - Actions
+      parameters:
+        - name: actionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Action'
+      responses:
+        '200':
+          description: The updated action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Action'
+    delete:
+      summary: Delete an action
+      operationId: deleteAction
+      tags:
+        - Actions
+      parameters:
+        - name: actionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No content, indicating the action was successfully deleted
+components:
+  schemas:
+    Action:
+      type: object
+      required:
+        - description
+        - sequence
+      properties:
+        actionId:
+          type: integer
+          format: int64
+          description: Unique identifier for the Action.
+        description:
+          type: string
+          description: Textual description of what happens in this action.
+        sequence:
+          type: integer
+          format: int32
+          description: Numerical order of the action within its container.

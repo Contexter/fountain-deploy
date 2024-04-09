@@ -1,0 +1,156 @@
+openapi: 3.0.1
+info:
+  title: Script Management API
+  description: API for managing screenplay scripts, including creation, retrieval, updating, and deletion.
+  version: "1.0.0"
+servers:
+  - url: 'https://script.fountain.coach'
+paths:
+  /scripts:
+    get:
+      summary: Lists all scripts
+      operationId: listScripts
+      responses:
+        '200':
+          description: An array of scripts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Script'
+        '500':
+          description: Internal server error
+    post:
+      summary: Create a new script
+      operationId: createScript
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScriptCreateRequest'
+      responses:
+        '201':
+          description: Script successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Script'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /scripts/{scriptId}:
+    parameters:
+      - name: scriptId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get a script by its ID
+      operationId: getScriptById
+      responses:
+        '200':
+          description: Script details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Script'
+        '404':
+          description: Script not found
+        '500':
+          description: Internal server error
+    put:
+      summary: Update a script by its ID
+      operationId: updateScript
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScriptUpdateRequest'
+      responses:
+        '200':
+          description: Script successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Script'
+        '400':
+          description: Bad request
+        '404':
+          description: Script not found
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete a script by its ID
+      operationId: deleteScript
+      responses:
+        '204':
+          description: Script successfully deleted
+        '404':
+          description: Script not found
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Script:
+      type: object
+      properties:
+        scriptId:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Hamlet"
+        description:
+          type: string
+          example: "A tragedy by William Shakespeare."
+        author:
+          type: string
+          example: "William Shakespeare"
+        sequence:
+          type: integer
+          example: 10
+      required:
+        - title
+        - author
+
+    ScriptCreateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Hamlet"
+        description:
+          type: string
+          example: "A tragedy by William Shakespeare."
+        author:
+          type: string
+          example: "William Shakespeare"
+        sequence:
+          type: integer
+          example: 10
+      required:
+        - title
+        - author
+
+    ScriptUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Hamlet - Revised Edition"
+        description:
+          type: string
+          example: "A revised version of the original tragedy by William Shakespeare."
+        author:
+          type: string
+          example: "William Shakespeare"
+        sequence:
+          type: integer
+          example: 20

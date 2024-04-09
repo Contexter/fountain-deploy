@@ -1,0 +1,125 @@
+openapi: 3.0.1
+info:
+  title: Script Notes API
+  description: This API allows clients to manage notes within scripts.
+  version: 1.0.0
+servers:
+  - url: 'https://example.com/api'
+paths:
+  /notes:
+    post:
+      summary: Create a new note
+      operationId: createNote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - scriptId
+                - text
+                - sequence
+              properties:
+                scriptId:
+                  type: integer
+                text:
+                  type: string
+                sequence:
+                  type: integer
+      responses:
+        '201':
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+        '400':
+          description: Invalid input data
+
+  /notes/{noteId}:
+    get:
+      summary: Get a note by ID
+      operationId: getNoteById
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+        '404':
+          description: Note not found
+
+    put:
+      summary: Update a note
+      operationId: updateNote
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                sequence:
+                  type: integer
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+        '400':
+          description: Invalid input data
+        '404':
+          description: Note not found
+
+    delete:
+      summary: Delete a note
+      operationId: deleteNote
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Successfully deleted
+        '404':
+          description: Note not found
+
+components:
+  schemas:
+    Note:
+      type: object
+      required:
+        - noteId
+        - scriptId
+        - text
+        - sequence
+      properties:
+        noteId:
+          type: integer
+        scriptId:
+          type: integer
+        text:
+          type: string
+        sequence:
+          type: integer
+

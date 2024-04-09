@@ -1,0 +1,140 @@
+openapi: 3.0.1
+info:
+  title: MusicSound API
+  description: API for managing MusicSound entities and integrating with Csound, LilyPond, and MIDI capabilities.
+  version: "1.0"
+servers:
+  - url: https://example.com/api
+paths:
+  /musicsound:
+    get:
+      summary: List all MusicSound entities
+      responses:
+        '200':
+          description: A list of MusicSound entities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MusicSound'
+    post:
+      summary: Create a new MusicSound entity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MusicSound'
+      responses:
+        '201':
+          description: Created MusicSound entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MusicSound'
+  /musicsound/{id}:
+    get:
+      summary: Get a MusicSound entity by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A MusicSound entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MusicSound'
+    put:
+      summary: Update a MusicSound entity by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MusicSound'
+      responses:
+        '200':
+          description: Updated MusicSound entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MusicSound'
+    delete:
+      summary: Delete a MusicSound entity by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted MusicSound entity
+  /musicsound/{id}/csound:
+    post:
+      summary: Process a MusicSound entity with Csound
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: MusicSound entity processed with Csound
+  /musicsound/{id}/lilypond:
+    post:
+      summary: Notate a MusicSound entity with LilyPond
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: MusicSound entity notated with LilyPond
+  /musicsound/{id}/midi:
+    post:
+      summary: Convert a MusicSound entity to MIDI
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: MusicSound entity converted to MIDI
+components:
+  schemas:
+    MusicSound:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        description:
+          type: string
+        sequence:
+          type: integer
+        csoundData:
+          type: string
+          description: Csound processing data
+        lilyPondNotation:
+          type: string
+          description: LilyPond notation
+        midiData:
+          type: string
+          description: MIDI data

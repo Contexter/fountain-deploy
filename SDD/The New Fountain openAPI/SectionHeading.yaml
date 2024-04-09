@@ -1,18 +1,22 @@
 openapi: 3.0.1
 info:
   title: Script Management API
-  description: API to manage scripts and their components, including Section Headings and Cross References, facilitating complex many-to-many relationships.
+  description: |
+    An API designed to manage scripts and their integral components, including Section Headings and Cross References. This system facilitates the management of complex many-to-many relationships between different elements of a script, enhancing scriptwriting and editing workflows.
   version: "1.0.0"
 servers:
-  - url: 'https://api.yourdomain.com/v1'
+  - url: 'https://sectionheading.fountain.coach'
+    description: Main server for the Script Management API, handling section headings and cross references.
+
 paths:
   /sectionHeadings:
     get:
-      summary: Get a list of Section Headings
+      summary: Retrieve Section Headings
       operationId: listSectionHeadings
+      description: Fetches a list of all Section Headings across scripts, providing an overview of script structures.
       responses:
         '200':
-          description: A JSON array of Section Headings
+          description: Successfully retrieved a JSON array of Section Headings.
           content:
             application/json:
               schema:
@@ -20,28 +24,32 @@ paths:
                 items:
                   $ref: '#/components/schemas/SectionHeading'
     post:
-      summary: Create a new Section Heading
+      summary: Create Section Heading
       operationId: createSectionHeading
+      description: Creates a new Section Heading within a script, specifying its sequence, title, and associated script ID.
       requestBody:
         required: true
+        description: Data required to create a new Section Heading.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SectionHeading'
       responses:
         '201':
-          description: Section Heading created
+          description: Successfully created a new Section Heading.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SectionHeading'
+
   /crossReferences:
     get:
-      summary: Get a list of Cross References
+      summary: Retrieve Cross References
       operationId: listCrossReferences
+      description: Fetches a list of Cross References, detailing the interconnections between script elements.
       responses:
         '200':
-          description: A JSON array of Cross References
+          description: Successfully retrieved a JSON array of Cross References.
           content:
             application/json:
               schema:
@@ -49,60 +57,66 @@ paths:
                 items:
                   $ref: '#/components/schemas/CrossReference'
     post:
-      summary: Create a new Cross Reference
+      summary: Create Cross Reference
       operationId: createCrossReference
+      description: Establishes a new Cross Reference between two script elements, defining a complex relationship.
       requestBody:
         required: true
+        description: Data required to create a new Cross Reference.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CrossReference'
       responses:
         '201':
-          description: Cross Reference created
+          description: Successfully created a new Cross Reference.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CrossReference'
+
 components:
   schemas:
     SectionHeading:
       type: object
+      description: Represents a structural element within a script, marking the beginning of a new section.
       properties:
         headingId:
           type: integer
-          description: Unique identifier for the Section Heading
+          description: Unique identifier for the Section Heading.
         scriptId:
           type: integer
-          description: Identifier of the Script this Section Heading belongs to
+          description: Identifier of the script this Section Heading belongs to.
         title:
           type: string
-          description: Title of the Section Heading
+          description: Title of the Section Heading.
         sequence:
           type: integer
-          description: Order sequence of the Section Heading within the script
+          description: Order sequence of the Section Heading within the script.
       required:
         - scriptId
         - title
         - sequence
+
     CrossReference:
       type: object
+      description: Defines a relationship between two elements within or across scripts, enabling detailed notation of interconnections.
       properties:
         referenceId:
           type: integer
-          description: Unique identifier for the Cross Reference
+          description: Unique identifier for the Cross Reference.
         sourceElementId:
           type: integer
-          description: ID of the source element in the Cross Reference relationship
+          description: ID of the source element in the Cross Reference relationship.
         targetType:
           type: string
-          description: The type of target element (e.g., SectionHeading, Action, etc.)
+          description: The type of the target element (e.g., SectionHeading, Action).
         targetId:
           type: integer
-          description: ID of the target element in the Cross Reference relationship, if applicable
+          description: ID of the target element in the Cross Reference relationship, specifying direct connections.
         description:
           type: string
-          description: Description or notes about the Cross Reference
+          description: Notes or description about the nature of the Cross Reference.
       required:
         - sourceElementId
         - targetType

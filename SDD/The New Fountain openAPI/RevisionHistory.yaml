@@ -1,21 +1,19 @@
 openapi: 3.0.1
 info:
   title: RevisionHistory API
-  description: An API for managing revision history records in the New Fountain script system.
+  description: An API for managing revision history records in the New Fountain script system, allowing for detailed tracking of script modifications.
   version: 1.0.0
 servers:
   - url: 'https://revisionhistory.fountain.coach'
-    description: Main production server
+    description: Main production server for managing revision histories.
 paths:
   /revisionhistory:
     get:
       summary: List all revision history records
       operationId: listRevisionHistories
-      tags:
-        - RevisionHistory
       responses:
         '200':
-          description: A list of revision history records
+          description: A list of revision history records.
           content:
             application/json:
               schema:
@@ -25,8 +23,6 @@ paths:
     post:
       summary: Create a new revision history record
       operationId: createRevisionHistory
-      tags:
-        - RevisionHistory
       requestBody:
         required: true
         content:
@@ -35,7 +31,7 @@ paths:
               $ref: '#/components/schemas/RevisionHistory'
       responses:
         '201':
-          description: Created
+          description: Created.
           content:
             application/json:
               schema:
@@ -44,8 +40,6 @@ paths:
     get:
       summary: Get a revision history record by ID
       operationId: getRevisionHistoryById
-      tags:
-        - RevisionHistory
       parameters:
         - name: revisionId
           in: path
@@ -54,22 +48,21 @@ paths:
             type: integer
       responses:
         '200':
-          description: A single revision history record
+          description: A single revision history record.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RevisionHistory'
     put:
       summary: Update a revision history record
-      operationId: updateRevisionHistory
-      tags:
-        - RevisionHistory
+      operationId: uniquelyUpdateRevisionHistory
       parameters:
-        - name: revisionId
+        - name: uniqueRevisionId
           in: path
           required: true
           schema:
             type: integer
+          description: Unique identifier for the revision history record, specified for update.
       requestBody:
         required: true
         content:
@@ -78,7 +71,7 @@ paths:
               $ref: '#/components/schemas/RevisionHistory'
       responses:
         '200':
-          description: Successfully updated
+          description: Successfully updated.
           content:
             application/json:
               schema:
@@ -86,8 +79,6 @@ paths:
     delete:
       summary: Delete a revision history record
       operationId: deleteRevisionHistory
-      tags:
-        - RevisionHistory
       parameters:
         - name: revisionId
           in: path
@@ -96,7 +87,7 @@ paths:
             type: integer
       responses:
         '204':
-          description: Successfully deleted
+          description: Successfully deleted.
 components:
   schemas:
     RevisionHistory:
@@ -109,14 +100,14 @@ components:
       properties:
         revisionId:
           type: integer
-          description: Unique identifier for the revision history record
+          description: Unique identifier for the revision history record.
         scriptId:
           type: integer
-          description: Identifier for the script associated with this revision
+          description: Identifier for the script associated with this revision.
         date:
           type: string
           format: date
-          description: The date of the revision
+          description: The date of the revision.
         description:
           type: string
-          description: A brief description of the revision
+          description: A brief description of the revision.

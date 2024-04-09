@@ -1,20 +1,24 @@
 openapi: 3.0.1
 info:
   title: Action API
-  description: API for managing Action entities within a script management system.
+  description: |
+    The Action API facilitates the management of Action entities within a script management system, enabling the creation, retrieval, updating, and deletion of actions. This API serves as the backbone for organizing scripts by allowing users to manipulate action entities that represent individual steps or events in a script. With version 1.0, users can interact with the API to list all available actions, create new actions, get details about specific actions, update existing actions, and delete actions as necessary.
   version: "1.0"
 servers:
   - url: https://example.com/api/v1
+    description: Production server for the Action API.
 paths:
   /actions:
     get:
-      summary: Get a list of actions
+      summary: Retrieve All Actions
       operationId: listActions
       tags:
         - Actions
+      description: |
+        Lists all actions currently stored within the system. This endpoint is useful for getting an overview of all actions or for initializing user interfaces with data.
       responses:
         '200':
-          description: A list of actions
+          description: A JSON array of action entities.
           content:
             application/json:
               schema:
@@ -22,84 +26,99 @@ paths:
                 items:
                   $ref: '#/components/schemas/Action'
     post:
-      summary: Create a new action
+      summary: Create a New Action
       operationId: createAction
       tags:
         - Actions
+      description: |
+        Allows for the creation of a new action entity. Clients must provide an action description and its sequence within a script. This endpoint is key for adding new steps to existing scripts or creating the initial action in a new script.
       requestBody:
         required: true
+        description: A JSON object containing the new action's details.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Action'
       responses:
         '201':
-          description: The created action
+          description: The action has been successfully created.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Action'
-  /actions/{actionId}:
+  /actions/{actionLookupId}:
     get:
-      summary: Get a specific action by ID
+      summary: Fetch a Specific Action
       operationId: getActionById
       tags:
         - Actions
+      description: |
+        Retrieves detailed information about a specific action by its unique identifier. This can be used to display the details of an action or to edit it.
       parameters:
-        - name: actionId
+        - name: actionLookupId
           in: path
           required: true
+          description: The unique identifier of the action to retrieve.
           schema:
             type: integer
       responses:
         '200':
-          description: The requested action
+          description: Detailed information about the requested action.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Action'
     put:
-      summary: Update an action
+      summary: Update an Existing Action
       operationId: updateAction
       tags:
         - Actions
+      description: |
+        Updates the details of an existing action. This endpoint is utilized when modifications to the description or sequence of an action are necessary. The entire action entity must be provided, including the fields not being modified.
       parameters:
-        - name: actionId
+        - name: actionUpdateId
           in: path
           required: true
+          description: The unique identifier of the action to update.
           schema:
             type: integer
       requestBody:
         required: true
+        description: A JSON object containing the updated details of the action.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Action'
       responses:
         '200':
-          description: The updated action
+          description: The updated action entity.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Action'
     delete:
-      summary: Delete an action
+      summary: Delete an Action
       operationId: deleteAction
       tags:
         - Actions
+      description: |
+        Permanently deletes an action from the system. This endpoint should be used with caution as it removes the specified action entirely.
       parameters:
-        - name: actionId
+        - name: actionDeleteId
           in: path
           required: true
+          description: The unique identifier of the action to delete.
           schema:
             type: integer
       responses:
         '204':
-          description: No content, indicating the action was successfully deleted
+          description: The action was successfully deleted with no content returned.
 components:
   schemas:
     Action:
       type: object
+      description: |
+        Represents a single action within a script, detailing what happens at this step and its order relative to other actions.
       required:
         - description
         - sequence
@@ -107,11 +126,11 @@ components:
         actionId:
           type: integer
           format: int64
-          description: Unique identifier for the Action.
+          description: The unique identifier for the Action, automatically generated upon creation.
         description:
           type: string
-          description: Textual description of what happens in this action.
+          description: A textual description outlining what happens in this action.
         sequence:
           type: integer
           format: int32
-          description: Numerical order of the action within its container.
+          description: The numerical order of the action within its script, used to organize actions sequentially.

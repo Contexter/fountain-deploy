@@ -1,18 +1,21 @@
 openapi: 3.0.1
 info:
   title: CrossReference Management API
-  description: API for managing cross-references between screenplay elements to enhance narrative and structural complexity, with tagging features for categorization.
+  description: |
+    This API facilitates managing cross-references between screenplay elements, aiming to enhance narrative and structural complexity. It provides capabilities for creating, listing, updating, and deleting cross-references, with tagging features for efficient categorization and retrieval.
   version: "1.0.0"
 servers:
   - url: 'https://crossreference.fountain.coach'
+    description: Main production server for the CrossReference Management API.
 paths:
   /crossreferences:
     get:
-      summary: Lists all cross-references
+      summary: Retrieve All Cross-References
       operationId: listCrossReferences
+      description: Lists every cross-reference recorded in the system. This endpoint is instrumental for obtaining an overview of how screenplay elements interconnect, facilitating a deeper understanding of narrative structures.
       responses:
         '200':
-          description: An array of cross-references
+          description: A JSON array of cross-reference entities.
           content:
             application/json:
               schema:
@@ -20,139 +23,164 @@ paths:
                 items:
                   $ref: '#/components/schemas/CrossReference'
         '500':
-          description: Internal server error
+          description: Internal server error indicating a failure to process the request.
     post:
-      summary: Create a new cross-reference
+      summary: Create a Cross-Reference
       operationId: createCrossReference
+      description: Allows for the creation of a new cross-reference between screenplay elements. This endpoint is key to enhancing the screenplay's complexity by explicitly defining relationships and narrative threads.
       requestBody:
         required: true
+        description: A JSON object detailing the new cross-reference to be created.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CrossReferenceCreateRequest'
       responses:
         '201':
-          description: CrossReference successfully created
+          description: Cross-reference successfully created, returning the new entity.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CrossReference'
         '400':
-          description: Bad request
+          description: Bad request due to invalid input data.
         '500':
-          description: Internal server error
-
-  /crossreferences/{crossReferenceId}:
-    parameters:
-      - name: crossReferenceId
-        in: path
-        required: true
-        schema:
-          type: integer
+          description: Internal server error indicating a failure in creating the cross-reference.
+  /crossreferences/{crossRefId}:
     get:
-      summary: Get a cross-reference by its ID
+      summary: Fetch a Cross-Reference by ID
       operationId: getCrossReferenceById
+      parameters:
+        - name: crossRefId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the cross-reference being operated on.
       responses:
         '200':
-          description: CrossReference details
+          description: Detailed information about the requested cross-reference.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CrossReference'
         '404':
-          description: CrossReference not found
+          description: The specified cross-reference was not found.
         '500':
-          description: Internal server error
+          description: Internal server error indicating a failure to retrieve the cross-reference.
     put:
-      summary: Update a cross-reference by its ID
+      summary: Update a Cross-Reference
       operationId: updateCrossReference
+      parameters:
+        - name: crossRefId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the cross-reference being updated.
       requestBody:
         required: true
+        description: A JSON object containing the updated fields for the cross-reference.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CrossReferenceUpdateRequest'
       responses:
         '200':
-          description: CrossReference successfully updated
+          description: Cross-reference successfully updated.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CrossReference'
         '400':
-          description: Bad request
+          description: Bad request due to invalid data for the update.
         '404':
-          description: CrossReference not found
+          description: The specified cross-reference was not found and cannot be updated.
         '500':
-          description: Internal server error
+          description: Internal server error indicating a failure in updating the cross-reference.
     delete:
-      summary: Delete a cross-reference by its ID
+      summary: Delete a Cross-Reference
       operationId: deleteCrossReference
+      parameters:
+        - name: crossRefId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier for the cross-reference being deleted.
       responses:
         '204':
-          description: CrossReference successfully deleted
+          description: Cross-reference successfully deleted, with no content returned.
         '404':
-          description: CrossReference not found
+          description: The specified cross-reference was not found and cannot be deleted.
         '500':
-          description: Internal server error
-
+          description: Internal server error indicating a failure in deleting the cross-reference.
 components:
   schemas:
     CrossReference:
       type: object
+      description: Represents a linkage between two screenplay elements, including source and target elements, with tags for categorization and a description to clarify the narrative significance.
       properties:
         crossReferenceId:
           type: integer
+          description: Unique identifier for the cross-reference.
           example: 1
         sourceElementId:
           type: integer
+          description: Identifier for the source screenplay element in the cross-reference.
           example: 2
         targetId:
           type: integer
+          description: Identifier for the target screenplay element in the cross-reference.
           example: 3
         tags:
           type: array
+          description: A list of tags for categorizing and querying cross-references.
           items:
             type: string
           example: ["FirstAppearance", "CriticalMoment"]
         description:
           type: string
-          example: "References the character's first appearance."
+          description: A textual description of the narrative or structural significance of the cross-reference.
       required:
         - sourceElementId
         - targetId
-
     CrossReferenceCreateRequest:
       type: object
+      description: Defines the structure for creating a new cross-reference, including the necessary identifiers for the source and target elements, optional tags, and a description.
       properties:
         sourceElementId:
           type: integer
+          description: Identifier for the source screenplay element in the new cross-reference.
         targetId:
           type: integer
+          description: Identifier for the target screenplay element in the new cross-reference.
         tags:
           type: array
+          description: Tags for categorizing the cross-reference.
           items:
             type: string
         description:
           type: string
+          description: Description of the cross-reference's narrative significance.
       required:
         - sourceElementId
         - targetId
-
     CrossReferenceUpdateRequest:
       type: object
+      description: Outlines the data structure for updating an existing cross-reference. It allows partial updates to the source and target IDs, tags, and description.
       properties:
         sourceElementId:
           type: integer
-          description: "Optional, to update the source element ID."
+          description: Optional. Identifier for the new source screenplay element, if updating.
         targetId:
           type: integer
-          description: "Optional, to update the target ID."
+          description: Optional. Identifier for the new target screenplay element, if updating.
         tags:
           type: array
+          description: Optional. New tags for the cross-reference, if updating.
           items:
             type: string
-          description: "Optional, to update the tags associated with the cross-reference."
         description:
           type: string
-          description: "Optional, to update the description of the cross-reference."
+          description: Optional. New narrative or structural description of the cross-reference, if updating.

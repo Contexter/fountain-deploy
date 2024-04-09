@@ -1,18 +1,21 @@
 openapi: 3.0.1
 info:
   title: Character Management API
-  description: API for managing characters within a screenplay application, allowing for characters to exist independently of scripts.
+  description: |
+    This API facilitates managing characters within a screenplay application, enabling characters to exist independently of specific scripts. It supports operations for creating, listing, retrieving, updating, and deleting characters, providing a comprehensive toolset for screenplay character management.
   version: "1.0.0"
 servers:
   - url: 'https://character.fountain.coach'
+    description: Main production server for the Character Management API.
 paths:
   /characters:
     get:
-      summary: Lists all characters
+      summary: Retrieve All Characters
       operationId: listCharacters
+      description: Lists all characters stored within the application, offering an overview of the characters available for screenplay development.
       responses:
         '200':
-          description: An array of characters
+          description: A JSON array of character entities.
           content:
             application/json:
               schema:
@@ -20,124 +23,150 @@ paths:
                 items:
                   $ref: '#/components/schemas/Character'
         '500':
-          description: Internal server error
+          description: Internal server error indicating a failure to process the request.
     post:
-      summary: Create a new character
+      summary: Create a New Character
       operationId: createCharacter
+      description: Allows for the creation of a new character, adding to the pool of characters available for inclusion in screenplays.
       requestBody:
         required: true
+        description: A JSON object detailing the new character to be created.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CharacterCreateRequest'
       responses:
         '201':
-          description: Character successfully created
+          description: Character successfully created, returning the new character entity.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Character'
         '400':
-          description: Bad request
+          description: Bad request due to invalid input data.
         '500':
-          description: Internal server error
-
+          description: Internal server error indicating a failure in creating the character.
   /characters/{characterId}:
-    parameters:
-      - name: characterId
-        in: path
-        required: true
-        schema:
-          type: integer
     get:
-      summary: Get a character by its ID
+      summary: Fetch a Character by ID
       operationId: getCharacterById
+      description: Retrieves detailed information about a specific character by its unique identifier, useful for editing or detailed viewing.
+      parameters:
+        - name: characterId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the character being retrieved.
       responses:
         '200':
-          description: Character details
+          description: Detailed information about the requested character.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Character'
         '404':
-          description: Character not found
+          description: The specified character was not found.
         '500':
-          description: Internal server error
+          description: Internal server error indicating a failure to retrieve the character.
     put:
-      summary: Update a character by its ID
+      summary: Update a Character
       operationId: updateCharacter
+      description: Updates an existing character's information, allowing for modifications to details such as the character's name and description.
+      parameters:
+        - name: characterId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the character being updated.
       requestBody:
         required: true
+        description: A JSON object containing the updated details of the character.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CharacterUpdateRequest'
       responses:
         '200':
-          description: Character successfully updated
+          description: Character successfully updated.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Character'
         '400':
-          description: Bad request
+          description: Bad request due to invalid data for the update.
         '404':
-          description: Character not found
+          description: The specified character was not found and cannot be updated.
         '500':
-          description: Internal server error
+          description: Internal server error indicating a failure in updating the character.
     delete:
-      summary: Delete a character by its ID
+      summary: Delete a Character
       operationId: deleteCharacter
+      description: Permanently removes a character from the application, erasing all associated information and unlinking them from any scripts.
+      parameters:
+        - name: characterId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Unique identifier of the character being deleted.
       responses:
         '204':
-          description: Character successfully deleted
+          description: Character successfully deleted, with no content returned.
         '404':
-          description: Character not found
+          description: The specified character was not found and cannot be deleted.
         '500':
-          description: Internal server error
-
+          description: Internal server error indicating a failure in deleting the character.
 components:
   schemas:
     Character:
       type: object
+      description: Represents a character entity within the screenplay application, containing details such as name, description, and associated script IDs.
       properties:
         characterId:
           type: integer
+          description: Unique identifier for the character.
           example: 1
         name:
           type: string
+          description: Name of the character.
           example: "Juliet"
         description:
           type: string
+          description: A brief description of the character and their role within the screenplay.
           example: "The heroine of Romeo and Juliet."
         scriptIds:
           type: array
+          description: Array of script IDs where the character appears, can be empty if the character is not currently part of any script.
           items:
             type: integer
-          description: "Array of script IDs where the character appears. Can be empty if character is not currently part of any script."
           example: [2, 5, 7]
       required:
         - name
-
     CharacterCreateRequest:
       type: object
+      description: Schema defining the structure required to create a new character, including name and optionally a description.
       properties:
         name:
           type: string
+          description: Name of the new character.
           example: "Juliet"
         description:
           type: string
+          description: Description of the new character, outlining their role and significance.
           example: "The heroine of Romeo and Juliet."
       required:
         - name
-
     CharacterUpdateRequest:
       type: object
+      description: Schema for updating the details of an existing character, allowing changes to the name, description, and associated script IDs.
       properties:
         name:
           type: string
+          description: Updated name of the character.
           example: "Juliet Capulet"
         description:
           type: string
+          description: Updated description of the character, providing a more detailed background and role in the story.
           example: "A detailed description of Juliet, including background and role in the story."
-

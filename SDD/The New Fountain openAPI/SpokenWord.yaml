@@ -1,18 +1,22 @@
 openapi: 3.0.1
 info:
   title: SpokenWord API
-  description: API to manage SpokenWord entities and their cross-references in a scriptwriting application.
-  version: 1.0.0
+  description: |
+    An API designed to manage SpokenWord entities and their cross-references in a scriptwriting application. This includes operations to list, create, retrieve, update, and delete SpokenWord entities, as well as to establish cross-references between these entities and other elements within the script.
+  version: "1.0.0"
 servers:
-  - url: 'https://api.yourdomain.com/v1'
+  - url: 'https://spokenwords.fountain.coach'
+    description: Main server for the SpokenWord API, managing spoken word entries and cross-references.
+
 paths:
   /spokenWords:
     get:
-      summary: Get a list of SpokenWords
+      summary: Retrieve All SpokenWords
       operationId: getSpokenWords
+      description: Fetches a list of all SpokenWords entities in the system, providing an overview of spoken dialogues.
       responses:
         '200':
-          description: A list of SpokenWords
+          description: Successfully retrieved a list of SpokenWords.
           content:
             application/json:
               schema:
@@ -20,93 +24,108 @@ paths:
                 items:
                   $ref: '#/components/schemas/SpokenWord'
     post:
-      summary: Create a new SpokenWord
+      summary: Create SpokenWord
       operationId: createSpokenWord
+      description: Creates a new SpokenWord entity with provided dialogue text and sequence within the script.
       requestBody:
         required: true
+        description: Details for the new SpokenWord entity to be created.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SpokenWord'
       responses:
         '201':
-          description: Created
+          description: Successfully created a new SpokenWord entity.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SpokenWord'
+
   /spokenWords/{id}:
     get:
-      summary: Get a SpokenWord by ID
+      summary: Retrieve a SpokenWord by ID
       operationId: getSpokenWordById
+      description: Fetches details of a specific SpokenWord entity by its unique ID.
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
+          description: Unique identifier of the SpokenWord to retrieve.
       responses:
         '200':
-          description: A SpokenWord object
+          description: Successfully retrieved the SpokenWord entity.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SpokenWord'
     put:
-      summary: Update a SpokenWord
+      summary: Update SpokenWord
       operationId: updateSpokenWord
+      description: Updates an existing SpokenWord entity with new dialogue text or sequence.
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
+          description: Unique identifier of the SpokenWord to update.
       requestBody:
         required: true
+        description: Updated details for the SpokenWord entity.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SpokenWord'
       responses:
         '200':
-          description: Updated
+          description: Successfully updated the SpokenWord entity.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SpokenWord'
     delete:
-      summary: Delete a SpokenWord
+      summary: Delete SpokenWord
       operationId: deleteSpokenWord
+      description: Removes a SpokenWord entity from the system by its unique ID.
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
+          description: Unique identifier of the SpokenWord to delete.
       responses:
         '204':
-          description: Deleted
+          description: Successfully deleted the SpokenWord entity.
+
   /crossReferences:
     post:
-      summary: Create a new CrossReference
+      summary: Create CrossReference
       operationId: createCrossReference
+      description: Establishes a new CrossReference between a SpokenWord entity and another script element, defining complex relationships.
       requestBody:
         required: true
+        description: Details for the new CrossReference to be created.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CrossReference'
       responses:
         '201':
-          description: Created
+          description: Successfully created a new CrossReference.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CrossReference'
+
 components:
   schemas:
     SpokenWord:
       type: object
+      description: Represents a dialogue or spoken word within the script, identified by a unique ID, text, and sequence order.
       required:
         - dialogueId
         - text
@@ -114,12 +133,17 @@ components:
       properties:
         dialogueId:
           type: integer
+          description: Unique identifier for the SpokenWord entity.
         text:
           type: string
+          description: The dialogue text of the SpokenWord entity.
         sequence:
           type: integer
+          description: Order sequence of the SpokenWord within the script.
+    
     CrossReference:
       type: object
+      description: Defines a link between a SpokenWord entity and other script elements, facilitating detailed relational mapping.
       required:
         - referenceId
         - sourceElementId
@@ -127,13 +151,18 @@ components:
       properties:
         referenceId:
           type: integer
+          description: Unique identifier for the CrossReference.
         sourceElementId:
           type: integer
+          description: ID of the source SpokenWord in the CrossReference relationship.
         targetType:
           type: string
+          description: Type of the target element (e.g., SectionHeading, Action, etc.) in the CrossReference relationship.
           enum: [one, all, namedEntity]
         targetId:
           type: integer
           nullable: true
+          description: ID of the target element in the CrossReference relationship, if applicable.
         description:
           type: string
+          description: Notes or description about the nature of the CrossReference.

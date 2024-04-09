@@ -1,17 +1,21 @@
 openapi: 3.0.1
 info:
   title: MusicSound API
-  description: API for managing MusicSound entities and integrating with Csound, LilyPond, and MIDI capabilities.
+  description: |
+    The MusicSound API provides capabilities for managing MusicSound entities with integrations for Csound, LilyPond, and MIDI. This API supports operations for creating, retrieving, updating, and deleting MusicSound entities, as well as processing them with Csound, notating with LilyPond, and converting to MIDI format. It serves the audio programming and musical notation communities by facilitating the technical implementation of music creation.
   version: "1.0"
 servers:
-  - url: https://example.com/api
+  - url: https://musicsound.fountain.coach
+    description: Primary server for the MusicSound API.
 paths:
   /musicsound:
     get:
-      summary: List all MusicSound entities
+      summary: Retrieve All MusicSound Entities
+      operationId: listAllMusicSounds
+      description: Lists all MusicSound entities available in the system, providing a comprehensive overview.
       responses:
         '200':
-          description: A list of MusicSound entities
+          description: A JSON array of MusicSound entities.
           content:
             application/json:
               schema:
@@ -19,104 +23,120 @@ paths:
                 items:
                   $ref: '#/components/schemas/MusicSound'
     post:
-      summary: Create a new MusicSound entity
+      summary: Create MusicSound Entity
+      operationId: createMusicSound
+      description: Allows for the creation of a new MusicSound entity, enabling users to add new sounds and musical elements into the system.
       requestBody:
         required: true
+        description: A JSON object containing the new MusicSound entity details.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/MusicSound'
       responses:
         '201':
-          description: Created MusicSound entity
+          description: MusicSound entity successfully created.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/MusicSound'
-  /musicsound/{id}:
+  /musicsound/{musicSoundId}:
     get:
-      summary: Get a MusicSound entity by ID
+      summary: Fetch MusicSound Entity by ID
+      operationId: getMusicSoundById
       parameters:
-        - name: id
+        - name: musicSoundId
           in: path
+          description: "Unique identifier of the MusicSound entity to retrieve."
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: A MusicSound entity
+          description: MusicSound entity details.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/MusicSound'
     put:
-      summary: Update a MusicSound entity by ID
+      summary: Update MusicSound Entity
+      operationId: updateMusicSound
       parameters:
-        - name: id
+        - name: musicSoundId
           in: path
+          description: "Unique identifier of the MusicSound entity to be updated."
           required: true
           schema:
             type: integer
       requestBody:
         required: true
+        description: "Payload containing updated data for the MusicSound entity."
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/MusicSound'
       responses:
         '200':
-          description: Updated MusicSound entity
+          description: "Successfully updated the MusicSound entity."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/MusicSound'
     delete:
-      summary: Delete a MusicSound entity by ID
+      summary: Delete MusicSound Entity
+      operationId: deleteMusicSound
       parameters:
-        - name: id
+        - name: musicSoundId
           in: path
+          description: "Unique identifier of the MusicSound entity to delete."
           required: true
           schema:
             type: integer
       responses:
         '204':
-          description: Deleted MusicSound entity
-  /musicsound/{id}/csound:
+          description: MusicSound entity successfully deleted.
+  /musicsound/{musicSoundId}/csound:
     post:
-      summary: Process a MusicSound entity with Csound
+      summary: Process with Csound
+      operationId: processWithCsound
       parameters:
-        - name: id
+        - name: musicSoundId
           in: path
+          description: "Unique identifier of the MusicSound entity for Csound processing."
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: MusicSound entity processed with Csound
-  /musicsound/{id}/lilypond:
+          description: MusicSound entity processed with Csound.
+  /musicsound/{musicSoundId}/lilypond:
     post:
-      summary: Notate a MusicSound entity with LilyPond
+      summary: Notate with LilyPond
+      operationId: notateWithLilyPond
       parameters:
-        - name: id
+        - name: musicSoundId
           in: path
+          description: "Unique identifier of the MusicSound entity for LilyPond notation."
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: MusicSound entity notated with LilyPond
-  /musicsound/{id}/midi:
+          description: MusicSound entity notated with LilyPond.
+  /musicsound/{musicSoundId}/midi:
     post:
-      summary: Convert a MusicSound entity to MIDI
+      summary: Convert to MIDI
+      operationId: convertToMIDI
       parameters:
-        - name: id
+        - name: musicSoundId
           in: path
+          description: "Unique identifier of the MusicSound entity for MIDI conversion."
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: MusicSound entity converted to MIDI
+          description: MusicSound entity converted to MIDI.
 components:
   schemas:
     MusicSound:
@@ -125,16 +145,19 @@ components:
         id:
           type: integer
           format: int64
+          description: Unique identifier for the MusicSound entity.
         description:
           type: string
+          description: Textual description of the MusicSound entity.
         sequence:
           type: integer
+          description: Sequence order of the MusicSound entity, used for ordering.
         csoundData:
           type: string
-          description: Csound processing data
+          description: Csound processing data for the entity.
         lilyPondNotation:
           type: string
-          description: LilyPond notation
+          description: LilyPond notation for the entity.
         midiData:
           type: string
-          description: MIDI data
+          description: MIDI data for the entity.

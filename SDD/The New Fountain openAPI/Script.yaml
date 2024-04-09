@@ -5,25 +5,26 @@ info:
   version: "1.0.0"
 servers:
   - url: 'https://script.fountain.coach'
+    description: Main server for Script Management API services.
 paths:
   /scripts:
     get:
-      summary: Lists all scripts
+      summary: Retrieve All Scripts
       operationId: listScripts
+      description: Lists all screenplay scripts stored within the system.
       responses:
         '200':
-          description: An array of scripts
+          description: An array of scripts.
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Script'
-        '500':
-          description: Internal server error
     post:
-      summary: Create a new script
+      summary: Create a New Script
       operationId: createScript
+      description: Creates a new screenplay script record in the system.
       requestBody:
         required: true
         content:
@@ -32,40 +33,42 @@ paths:
               $ref: '#/components/schemas/ScriptCreateRequest'
       responses:
         '201':
-          description: Script successfully created
+          description: Script successfully created.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Script'
-        '400':
-          description: Bad request
-        '500':
-          description: Internal server error
 
   /scripts/{scriptId}:
-    parameters:
-      - name: scriptId
-        in: path
-        required: true
-        schema:
-          type: integer
     get:
-      summary: Get a script by its ID
+      summary: Retrieve a Script by ID
       operationId: getScriptById
+      description: Retrieves the details of a specific screenplay script by its unique identifier (scriptId).
+      parameters:
+        - name: scriptId
+          in: path
+          required: true
+          description: Unique identifier of the screenplay script to retrieve.
+          schema:
+            type: integer
       responses:
         '200':
-          description: Script details
+          description: Detailed information about the requested script.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Script'
-        '404':
-          description: Script not found
-        '500':
-          description: Internal server error
     put:
-      summary: Update a script by its ID
+      summary: Update a Script by ID
       operationId: updateScript
+      description: Updates an existing screenplay script with new details.
+      parameters:
+        - name: scriptId
+          in: path
+          required: true
+          description: Unique identifier of the screenplay script to update.
+          schema:
+            type: integer
       requestBody:
         required: true
         content:
@@ -74,27 +77,25 @@ paths:
               $ref: '#/components/schemas/ScriptUpdateRequest'
       responses:
         '200':
-          description: Script successfully updated
+          description: Script successfully updated.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Script'
-        '400':
-          description: Bad request
-        '404':
-          description: Script not found
-        '500':
-          description: Internal server error
     delete:
-      summary: Delete a script by its ID
+      summary: Delete a Script by ID
       operationId: deleteScript
+      description: Deletes a specific screenplay script from the system.
+      parameters:
+        - name: scriptId
+          in: path
+          required: true
+          description: Unique identifier of the screenplay script to delete.
+          schema:
+            type: integer
       responses:
         '204':
-          description: Script successfully deleted
-        '404':
-          description: Script not found
-        '500':
-          description: Internal server error
+          description: Script successfully deleted.
 
 components:
   schemas:
@@ -103,19 +104,19 @@ components:
       properties:
         scriptId:
           type: integer
-          example: 1
+          description: Unique identifier for the screenplay script.
         title:
           type: string
-          example: "Hamlet"
+          description: Title of the screenplay script.
         description:
           type: string
-          example: "A tragedy by William Shakespeare."
+          description: Brief description or summary of the screenplay script.
         author:
           type: string
-          example: "William Shakespeare"
+          description: Author of the screenplay script.
         sequence:
           type: integer
-          example: 10
+          description: Sequence number representing the script's order or version.
       required:
         - title
         - author
@@ -125,16 +126,12 @@ components:
       properties:
         title:
           type: string
-          example: "Hamlet"
         description:
           type: string
-          example: "A tragedy by William Shakespeare."
         author:
           type: string
-          example: "William Shakespeare"
         sequence:
           type: integer
-          example: 10
       required:
         - title
         - author
@@ -144,13 +141,9 @@ components:
       properties:
         title:
           type: string
-          example: "Hamlet - Revised Edition"
         description:
           type: string
-          example: "A revised version of the original tragedy by William Shakespeare."
         author:
           type: string
-          example: "William Shakespeare"
         sequence:
           type: integer
-          example: 20

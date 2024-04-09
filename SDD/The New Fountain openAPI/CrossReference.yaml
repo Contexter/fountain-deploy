@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: CrossReference Management API
-  description: API for managing cross-references between screenplay elements to enhance narrative and structural complexity.
+  description: API for managing cross-references between screenplay elements to enhance narrative and structural complexity, with tagging features for categorization.
   version: "1.0.0"
 servers:
   - url: 'https://crossreference.fountain.coach'
@@ -107,34 +107,37 @@ components:
         sourceElementId:
           type: integer
           example: 2
-        targetType:
-          type: string
-          example: "Character"
         targetId:
           type: integer
           example: 3
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["FirstAppearance", "CriticalMoment"]
         description:
           type: string
           example: "References the character's first appearance."
       required:
         - sourceElementId
-        - targetType
+        - targetId
 
     CrossReferenceCreateRequest:
       type: object
       properties:
         sourceElementId:
           type: integer
-        targetType:
-          type: string
         targetId:
           type: integer
-          description: "Optional, used when targetType is a specific named entity."
+        tags:
+          type: array
+          items:
+            type: string
         description:
           type: string
       required:
         - sourceElementId
-        - targetType
+        - targetId
 
     CrossReferenceUpdateRequest:
       type: object
@@ -142,13 +145,14 @@ components:
         sourceElementId:
           type: integer
           description: "Optional, to update the source element ID."
-        targetType:
-          type: string
-          description: "Optional, to update the target type."
         targetId:
           type: integer
-          description: "Optional, used when targetType is a specific named entity."
+          description: "Optional, to update the target ID."
+        tags:
+          type: array
+          items:
+            type: string
+          description: "Optional, to update the tags associated with the cross-reference."
         description:
           type: string
           description: "Optional, to update the description of the cross-reference."
-

@@ -1,14 +1,17 @@
 openapi: 3.0.1
 info:
   title: Script Elements API
-  description: API for managing script elements including Transition and CrossReference instances.
-  version: 1.0.0
+  description: API for managing script elements including Transition and CrossReference instances, facilitating complex script structures.
+  version: "1.0.0"
 servers:
-  - url: 'https://example.com/api'
+  - url: 'https://transition.fountain.coach'
+    description: Main server for the Script Elements API, handling transitions and cross-references within scripts.
+
 paths:
   /transitions:
     get:
       summary: Get a list of Transitions
+      operationId: listTransitions
       responses:
         '200':
           description: A list of Transitions.
@@ -20,6 +23,7 @@ paths:
                   $ref: '#/components/schemas/Transition'
     post:
       summary: Create a new Transition
+      operationId: createTransition
       requestBody:
         required: true
         content:
@@ -33,9 +37,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Transition'
+
   /transitions/{transitionId}:
     get:
       summary: Get a Transition by ID
+      operationId: getTransitionById
       parameters:
         - name: transitionId
           in: path
@@ -51,12 +57,14 @@ paths:
                 $ref: '#/components/schemas/Transition'
     put:
       summary: Update a Transition by ID
+      operationId: uniquelyUpdateTransition
       parameters:
-        - name: transitionId
+        - name: uniqueTransitionId
           in: path
           required: true
           schema:
             type: integer
+          description: Unique identifier of the Transition to update.
       requestBody:
         required: true
         content:
@@ -72,6 +80,7 @@ paths:
                 $ref: '#/components/schemas/Transition'
     delete:
       summary: Delete a Transition by ID
+      operationId: deleteTransition
       parameters:
         - name: transitionId
           in: path
@@ -81,9 +90,23 @@ paths:
       responses:
         '204':
           description: Transition deleted.
+
   /crossReferences:
+    get:
+      summary: Get a list of CrossReferences
+      operationId: listCrossReferences
+      responses:
+        '200':
+          description: A list of CrossReferences.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrossReference'
     post:
       summary: Create a new CrossReference
+      operationId: createCrossReference
       requestBody:
         required: true
         content:
@@ -97,20 +120,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CrossReference'
-    get:
-      summary: Get a list of CrossReferences
-      responses:
-        '200':
-          description: A list of CrossReferences.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CrossReference'
+
   /crossReferences/{referenceId}:
     get:
       summary: Get a CrossReference by ID
+      operationId: getCrossReferenceById
       parameters:
         - name: referenceId
           in: path
@@ -126,12 +140,14 @@ paths:
                 $ref: '#/components/schemas/CrossReference'
     put:
       summary: Update a CrossReference by ID
+      operationId: uniquelyUpdateCrossReference
       parameters:
-        - name: referenceId
+        - name: uniqueReferenceId
           in: path
           required: true
           schema:
             type: integer
+          description: Unique identifier of the CrossReference to update.
       requestBody:
         required: true
         content:
@@ -147,6 +163,7 @@ paths:
                 $ref: '#/components/schemas/CrossReference'
     delete:
       summary: Delete a CrossReference by ID
+      operationId: deleteCrossReference
       parameters:
         - name: referenceId
           in: path
@@ -156,6 +173,7 @@ paths:
       responses:
         '204':
           description: CrossReference deleted.
+
 components:
   schemas:
     Transition:
@@ -173,6 +191,7 @@ components:
       required:
         - description
         - sequence
+
     CrossReference:
       type: object
       properties:

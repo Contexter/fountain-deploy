@@ -1,0 +1,101 @@
+openapi: 3.0.1
+info:
+  title: The Fountain Script Editing API
+  description: |
+    This API facilitates real-time collaborative script editing. It provides endpoints for managing script editing sessions
+    and utilizes WebSockets to handle real-time, bi-directional communication where script elements are collaboratively edited.
+  version: "1.0.0"
+servers:
+  - url: https://example.com
+    description: Secure HTTPS Server for RESTful Operations
+
+paths:
+  /sessions:
+    get:
+      operationId: listSessions
+      summary: List All Editing Sessions
+      description: Retrieves a list of all currently active editing sessions to allow users to join.
+      responses:
+        '200':
+          description: Successfully retrieved the list of editing sessions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+        '500':
+          description: Server error when attempting to retrieve sessions.
+
+  /sessions/{sessionId}:
+    get:
+      operationId: getSession
+      summary: Retrieve a Specific Session
+      description: Fetches details about a specific script editing session, including current script state and participant details.
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The unique identifier of the session to join or manipulate.
+      responses:
+        '200':
+          description: Successfully retrieved session details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '404':
+          description: The specified session was not found.
+        '500':
+          description: Server error when attempting to retrieve the session.
+
+    delete:
+      operationId: deleteSession
+      summary: Delete a Session
+      description: Deletes a specified script editing session. This is typically used when a session is concluded or cancelled.
+      parameters:
+        - in: path
+          name: sessionId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The unique identifier of the session to join or manipulate.
+      responses:
+        '204':
+          description: Successfully deleted the session.
+        '404':
+          description: The specified session was not found.
+        '500':
+          description: Server error when attempting to delete the session.
+
+components:
+  schemas:
+    Session:
+      type: object
+      required:
+        - sessionId
+        - scriptId
+        - participants
+        - scriptContent
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+          description: Unique identifier for the editing session.
+        scriptId:
+          type: string
+          format: uuid
+          description: Identifier of the script being edited in this session.
+        participants:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: List of participant identifiers who are currently connected to the session.
+        scriptContent:
+          type: string
+          description: Current full text content of the script being edited.

@@ -1,0 +1,71 @@
+openapi: 3.0.1
+info:
+  title: The Fountain Script Management API
+  description: |
+    This API includes capabilities for real-time event logging and accessing these logs via WebSockets and RESTful endpoints.
+  version: "1.0.0"
+servers:
+  - url: 'https://api.thefountain.io/v1'
+paths:
+  /events/history:
+    get:
+      summary: Retrieve Event History
+      description: |
+        Fetches the history of script events. This endpoint supports filtering by event types, date ranges, or specific script identifiers.
+      operationId: getEventHistory
+      tags:
+        - Event Log
+      parameters:
+        - in: query
+          name: startTime
+          schema:
+            type: string
+            format: date-time
+          description: Start of the date range for which events are requested.
+        - in: query
+          name: endTime
+          schema:
+            type: string
+            format: date-time
+          description: End of the date range for which events are requested.
+        - in: query
+          name: eventType
+          schema:
+            type: string
+          description: Type of events to retrieve (e.g., 'edit', 'create', 'delete').
+      responses:
+        '200':
+          description: Successfully retrieved the events.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: Invalid query parameters.
+
+components:
+  schemas:
+    Event:
+      type: object
+      required:
+        - eventId
+        - eventType
+        - timestamp
+        - details
+      properties:
+        eventId:
+          type: string
+          description: Unique identifier for the event.
+        eventType:
+          type: string
+          description: Type of event (e.g., 'edit', 'create', 'delete').
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp when the event occurred.
+        details:
+          type: object
+          additionalProperties: true
+          description: Detailed information about the event, potentially including affected script elements.

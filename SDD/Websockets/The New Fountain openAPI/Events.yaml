@@ -1,0 +1,58 @@
+openapi: 3.0.1
+info:
+  title: Event Log API
+  description: Provides access to the event log optimized for bot readability.
+  version: "1.0.0"
+servers:
+  - url: 'https://api.eventlog.io/v1'
+paths:
+  /events:
+    get:
+      summary: Retrieve Events
+      description: Fetches events from the log based on provided criteria.
+      operationId: getEvents
+      parameters:
+        - in: query
+          name: eventType
+          schema:
+            type: string
+          description: Filter events by type.
+        - in: query
+          name: startTime
+          schema:
+            type: string
+            format: date-time
+          description: Start timestamp for filtering events.
+        - in: query
+          name: endTime
+          schema:
+            type: string
+            format: date-time
+          description: End timestamp for filtering events.
+      responses:
+        '200':
+          description: An array of events.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        eventId:
+          type: string
+        eventType:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        entityId:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+

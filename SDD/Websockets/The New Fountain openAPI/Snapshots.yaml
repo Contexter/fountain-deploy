@@ -1,0 +1,72 @@
+openapi: 3.0.1
+info:
+  title: The Fountain Script Management API
+  description: |
+    This API facilitates the management of scripts within "The Fountain" editing platform. It includes endpoints for managing script snapshots for backup and recovery purposes, and integrates with a WebSocket service for real-time collaborative editing and event logging.
+  version: "1.0.0"
+servers:
+  - url: 'https://api.thefountain.io/v1'
+paths:
+  /snapshots:
+    get:
+      summary: Retrieve the Most Recent Script Snapshot
+      description: |
+        Fetches the most recent snapshot of the script state. This is typically used for initializing the state on new client connections or recovering the script state after disruptions.
+      operationId: getLatestSnapshot
+      tags:
+        - Snapshots
+      responses:
+        '200':
+          description: Successfully retrieved the latest snapshot of the script.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptSnapshot'
+        '404':
+          description: No snapshot available. Indicates that no snapshots have been taken or they are not accessible.
+  
+    post:
+      summary: Create a New Snapshot of the Script
+      description: |
+        Creates and stores a new snapshot of the current complete script state. This endpoint can be triggered after significant script updates or periodically through automated services.
+      operationId: createSnapshot
+      tags:
+        - Snapshots
+      requestBody:
+        description: Contains the current state of the script which will be captured in the snapshot.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScriptSnapshot'
+      responses:
+        '201':
+          description: The snapshot was created and stored successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptSnapshot'
+        '400':
+          description: Invalid data provided. Check the payload for errors.
+
+components:
+  schemas:
+    ScriptSnapshot:
+      type: object
+      description: Represents a complete snapshot of the script at a specific timestamp, including all relevant details and elements of the script.
+      required:
+        - scriptId
+        - content
+        - timestamp
+      properties:
+        scriptId:
+          type: string
+          description: A unique identifier for the script used across sessions and clients.
+        content:
+          type: object
+          additionalProperties: true
+          description: Detailed JSON structure containing the entire script elements such as dialogues, actions, characters, etc.
+        timestamp:
+          type: string
+          format: date-time
+          description: The exact date and time when the snapshot was taken, formatted in ISO 8601.

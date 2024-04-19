@@ -1,11 +1,11 @@
 openapi: 3.0.1
 info:
   title: Script Elements API
-  description: API for managing script elements including Transition and CrossReference instances, facilitating complex script structures.
+  description: API for managing script elements including Transition instances, facilitating complex script structures.
   version: "1.0.0"
 servers:
   - url: 'https://transition.fountain.coach'
-    description: Main server for the Script Elements API, handling transitions and cross-references within scripts.
+    description: Main server for the Script Elements API, handling transitions within scripts.
 
 paths:
   /transitions:
@@ -91,89 +91,6 @@ paths:
         '204':
           description: Transition deleted.
 
-  /crossReferences:
-    get:
-      summary: Get a list of CrossReferences
-      operationId: listCrossReferences
-      responses:
-        '200':
-          description: A list of CrossReferences.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CrossReference'
-    post:
-      summary: Create a new CrossReference
-      operationId: createCrossReference
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CrossReference'
-      responses:
-        '201':
-          description: Created CrossReference.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CrossReference'
-
-  /crossReferences/{referenceId}:
-    get:
-      summary: Get a CrossReference by ID
-      operationId: getCrossReferenceById
-      parameters:
-        - name: referenceId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: A single CrossReference.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CrossReference'
-    put:
-      summary: Update a CrossReference by ID
-      operationId: uniquelyUpdateCrossReference
-      parameters:
-        - name: uniqueReferenceId
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Unique identifier of the CrossReference to update.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CrossReference'
-      responses:
-        '200':
-          description: Updated CrossReference.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CrossReference'
-    delete:
-      summary: Delete a CrossReference by ID
-      operationId: deleteCrossReference
-      parameters:
-        - name: referenceId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: CrossReference deleted.
-
 components:
   schemas:
     Transition:
@@ -191,25 +108,3 @@ components:
       required:
         - description
         - sequence
-
-    CrossReference:
-      type: object
-      properties:
-        referenceId:
-          type: integer
-          description: The unique identifier for a CrossReference.
-        sourceElementId:
-          type: integer
-          description: The ID of the source script element.
-        targetType:
-          type: string
-          description: The type of target entity (one, all, or a specific named entity type).
-        targetId:
-          type: integer
-          description: The ID of the target entity (optional, used when targetType is a specific named entity).
-        description:
-          type: string
-          description: A description of the cross-reference.
-      required:
-        - sourceElementId
-        - targetType

@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Script Elements API
-  description: API for managing script elements including Transition instances, facilitating complex script structures.
+  description: API for managing script elements including Transition instances, facilitating complex script structures and their paraphrases.
   version: "1.0.0"
 servers:
   - url: 'https://transition.fountain.coach'
@@ -38,58 +38,49 @@ paths:
               schema:
                 $ref: '#/components/schemas/Transition'
 
-  /transitions/{transitionId}:
+  /transitions/{transitionId}/paraphrases:
     get:
-      summary: Get a Transition by ID
-      operationId: getTransitionById
+      summary: Retrieve All Paraphrases for a Transition
+      operationId: listTransitionParaphrases
       parameters:
         - name: transitionId
           in: path
           required: true
           schema:
             type: integer
+          description: Unique identifier of the Transition whose paraphrases are to be retrieved.
       responses:
         '200':
-          description: A single Transition.
+          description: A JSON array of paraphrases for the specified Transition.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transition'
-    put:
-      summary: Update a Transition by ID
-      operationId: uniquelyUpdateTransition
+                type: array
+                items:
+                  $ref: '#/components/schemas/Paraphrase'
+    post:
+      summary: Create a New Paraphrase for a Transition
+      operationId: createTransitionParaphrase
       parameters:
-        - name: uniqueTransitionId
+        - name: transitionId
           in: path
           required: true
           schema:
             type: integer
-          description: Unique identifier of the Transition to update.
+          description: The unique identifier of the Transition to which the paraphrase will be linked.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Transition'
+              $ref: '#/components/schemas/Paraphrase'
       responses:
-        '200':
-          description: Updated Transition.
+        '201':
+          description: The paraphrase has been successfully created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transition'
-    delete:
-      summary: Delete a Transition by ID
-      operationId: deleteTransition
-      parameters:
-        - name: transitionId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: Transition deleted.
+                $ref: '#/components/schemas/Paraphrase'
 
 components:
   schemas:
@@ -108,3 +99,25 @@ components:
       required:
         - description
         - sequence
+
+    Paraphrase:
+      type: object
+      description: Represents a paraphrased version of a script element, including textual paraphrase and commentary on the connection to the original.
+      required:
+        - originalId
+        - text
+        - commentary
+      properties:
+        paraphraseId:
+          type: integer
+          format: int64
+          description: The unique identifier for the Paraphrase, automatically generated upon creation.
+        originalId:
+          type: integer
+          description: The ID of the original Transition to which this paraphrase is linked.
+        text:
+          type: string
+          description: The paraphrased text of the original Transition description.
+        commentary:
+          type: string
+          description: An explanatory note on why the paraphrase is linked to the original Transition.

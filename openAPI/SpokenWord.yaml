@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: SpokenWord API
   description: |
-    An API designed to manage SpokenWord entities and their cross-references in a scriptwriting application. This includes operations to list, create, retrieve, update, and delete SpokenWord entities.
+    An API designed to manage SpokenWord entities in a scriptwriting application. This includes operations to list, create, retrieve, update, and delete SpokenWord entities.
   version: "1.0.0"
 servers:
   - url: 'https://spokenwords.fountain.coach'

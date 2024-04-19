@@ -2,11 +2,12 @@ openapi: 3.0.1
 info:
   title: Action API
   description: |
-    The Action API facilitates the management of Action entities within a script management system, enabling the creation, retrieval, updating, and deletion of actions. This API serves as the backbone for organizing scripts by allowing users to manipulate action entities that represent individual steps or events in a script. With version 1.0, users can interact with the API to list all available actions, create new actions, get details about specific actions, update existing actions, and delete actions as necessary.
+    The Action API facilitates the management of Action and Paraphrase entities within a script management system. This API enables the creation, retrieval, updating, and deletion of actions, as well as their paraphrased versions, thus serving as the backbone for organizing scripts by allowing users to manipulate action entities and their various expressive forms.
   version: "1.0"
 servers:
   - url: https://example.com/api/v1
     description: Production server for the Action API.
+
 paths:
   /actions:
     get:
@@ -46,73 +47,62 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Action'
-  /actions/{actionLookupId}:
+
+  /actions/{actionId}/paraphrases:
     get:
-      summary: Fetch a Specific Action
-      operationId: getActionById
+      summary: Retrieve All Paraphrases for an Action
+      operationId: listActionParaphrases
       tags:
         - Actions
+        - Paraphrases
       description: |
-        Retrieves detailed information about a specific action by its unique identifier. This can be used to display the details of an action or to edit it.
+        Retrieves all paraphrases linked to a specific action. This includes a commentary on why each paraphrase is connected to the original action.
       parameters:
-        - name: actionLookupId
+        - name: actionId
           in: path
           required: true
-          description: The unique identifier of the action to retrieve.
+          description: The unique identifier of the action whose paraphrases are to be retrieved.
           schema:
             type: integer
       responses:
         '200':
-          description: Detailed information about the requested action.
+          description: A JSON array of paraphrases for the specified action.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Action'
-    put:
-      summary: Update an Existing Action
-      operationId: updateAction
+                type: array
+                items:
+                  $ref: '#/components/schemas/Paraphrase'
+    post:
+      summary: Create a New Paraphrase for an Action
+      operationId: createActionParaphrase
       tags:
         - Actions
+        - Paraphrases
       description: |
-        Updates the details of an existing action. This endpoint is utilized when modifications to the description or sequence of an action are necessary. The entire action entity must be provided, including the fields not being modified.
+        Allows for the creation of a new paraphrase linked to an action. Clients must provide the paraphrased text and a commentary explaining the link to the original action.
       parameters:
-        - name: actionUpdateId
+        - name: actionId
           in: path
           required: true
-          description: The unique identifier of the action to update.
+          description: The unique identifier of the action to which the paraphrase will be linked.
           schema:
             type: integer
       requestBody:
         required: true
-        description: A JSON object containing the updated details of the action.
+        description: A JSON object containing the new paraphrase's details and its link commentary.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Action'
+              $ref: '#/components/schemas/Paraphrase'
       responses:
-        '200':
-          description: The updated action entity.
+        '201':
+          description: The paraphrase has been successfully created.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Action'
-    delete:
-      summary: Delete an Action
-      operationId: deleteAction
-      tags:
-        - Actions
-      description: |
-        Permanently deletes an action from the system. This endpoint should be used with caution as it removes the specified action entirely.
-      parameters:
-        - name: actionDeleteId
-          in: path
-          required: true
-          description: The unique identifier of the action to delete.
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: The action was successfully deleted with no content returned.
+                $ref: '#/components/schemas/Paraphrase'
+
 components:
   schemas:
     Action:
@@ -134,3 +124,30 @@ components:
           type: integer
           format: int32
           description: The numerical order of the action within its script, used to organize actions sequentially.
+        paraphrases:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paraphrase'
+
+    Paraphrase:
+      type: object
+      description: |
+        Represents a paraphrased version of a script element (e.g., action), including textual paraphrase and commentary on the connection to the original.
+      required:
+        - originalId
+        - text
+        - commentary
+      properties:
+        paraphraseId:
+          type: integer
+          format: int64
+          description: The unique identifier for the Paraphrase, automatically generated upon creation.
+        originalId:
+          type: integer
+          description: The ID of the original action to which this paraphrase is linked.
+        text:
+          type: string
+          description: The paraphrased text of the original action.
+        commentary:
+          type: string
+          description: An explanatory note on why the paraphrase is linked to the original action.

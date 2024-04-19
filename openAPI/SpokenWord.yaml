@@ -2,11 +2,11 @@ openapi: 3.0.1
 info:
   title: SpokenWord API
   description: |
-    An API designed to manage SpokenWord entities and their cross-references in a scriptwriting application. This includes operations to list, create, retrieve, update, and delete SpokenWord entities, as well as to establish cross-references between these entities and other elements within the script.
+    An API designed to manage SpokenWord entities and their cross-references in a scriptwriting application. This includes operations to list, create, retrieve, update, and delete SpokenWord entities.
   version: "1.0.0"
 servers:
   - url: 'https://spokenwords.fountain.coach'
-    description: Main server for the SpokenWord API, managing spoken word entries and cross-references.
+    description: Main server for the SpokenWord API, managing spoken word entries.
 
 paths:
   /spokenWords:
@@ -101,26 +101,6 @@ paths:
         '204':
           description: Successfully deleted the SpokenWord entity.
 
-  /crossReferences:
-    post:
-      summary: Create CrossReference
-      operationId: createCrossReference
-      description: Establishes a new CrossReference between a SpokenWord entity and another script element, defining complex relationships.
-      requestBody:
-        required: true
-        description: Details for the new CrossReference to be created.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CrossReference'
-      responses:
-        '201':
-          description: Successfully created a new CrossReference.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CrossReference'
-
 components:
   schemas:
     SpokenWord:
@@ -140,29 +120,3 @@ components:
         sequence:
           type: integer
           description: Order sequence of the SpokenWord within the script.
-    
-    CrossReference:
-      type: object
-      description: Defines a link between a SpokenWord entity and other script elements, facilitating detailed relational mapping.
-      required:
-        - referenceId
-        - sourceElementId
-        - targetType
-      properties:
-        referenceId:
-          type: integer
-          description: Unique identifier for the CrossReference.
-        sourceElementId:
-          type: integer
-          description: ID of the source SpokenWord in the CrossReference relationship.
-        targetType:
-          type: string
-          description: Type of the target element (e.g., SectionHeading, Action, etc.) in the CrossReference relationship.
-          enum: [one, all, namedEntity]
-        targetId:
-          type: integer
-          nullable: true
-          description: ID of the target element in the CrossReference relationship, if applicable.
-        description:
-          type: string
-          description: Notes or description about the nature of the CrossReference.

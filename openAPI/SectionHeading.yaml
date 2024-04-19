@@ -2,11 +2,11 @@ openapi: 3.0.1
 info:
   title: Script Management API
   description: |
-    An API designed to manage scripts and their integral components, including Section Headings and Cross References. This system facilitates the management of complex many-to-many relationships between different elements of a script, enhancing scriptwriting and editing workflows.
+    An API designed to manage scripts and their integral components, including Section Headings. This system facilitates the management of complex scripts, enhancing scriptwriting and editing workflows.
   version: "1.0.0"
 servers:
   - url: 'https://sectionheading.fountain.coach'
-    description: Main server for the Script Management API, handling section headings and cross references.
+    description: Main server for the Script Management API, handling section headings.
 
 paths:
   /sectionHeadings:
@@ -42,39 +42,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/SectionHeading'
 
-  /crossReferences:
-    get:
-      summary: Retrieve Cross References
-      operationId: listCrossReferences
-      description: Fetches a list of Cross References, detailing the interconnections between script elements.
-      responses:
-        '200':
-          description: Successfully retrieved a JSON array of Cross References.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CrossReference'
-    post:
-      summary: Create Cross Reference
-      operationId: createCrossReference
-      description: Establishes a new Cross Reference between two script elements, defining a complex relationship.
-      requestBody:
-        required: true
-        description: Data required to create a new Cross Reference.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CrossReference'
-      responses:
-        '201':
-          description: Successfully created a new Cross Reference.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CrossReference'
-
 components:
   schemas:
     SectionHeading:
@@ -97,26 +64,3 @@ components:
         - scriptId
         - title
         - sequence
-
-    CrossReference:
-      type: object
-      description: Defines a relationship between two elements within or across scripts, enabling detailed notation of interconnections.
-      properties:
-        referenceId:
-          type: integer
-          description: Unique identifier for the Cross Reference.
-        sourceElementId:
-          type: integer
-          description: ID of the source element in the Cross Reference relationship.
-        targetType:
-          type: string
-          description: The type of the target element (e.g., SectionHeading, Action).
-        targetId:
-          type: integer
-          description: ID of the target element in the Cross Reference relationship, specifying direct connections.
-        description:
-          type: string
-          description: Notes or description about the nature of the Cross Reference.
-      required:
-        - sourceElementId
-        - targetType

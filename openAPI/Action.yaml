@@ -5,7 +5,7 @@ info:
     The Action API facilitates the management of Action and Paraphrase entities within a script management system. This API enables the creation, retrieval, updating, and deletion of actions, as well as their paraphrased versions, thus serving as the backbone for organizing scripts by allowing users to manipulate action entities and their various expressive forms.
   version: "1.0"
 servers:
-  - url: https://example.com/api/v1
+  - url: https://action.fountain.coach
     description: Production server for the Action API.
 
 paths:
